@@ -1,0 +1,31 @@
+{
+  "entryPoints": ["../../src/index.ts"],
+  "out": "../../docs",
+  "theme": "default",
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "readme": "../../README.md",
+  "name": "@zairakai/js-utils",
+  "includeVersion": true,
+  "sort": ["source-order"],
+  "kindSortOrder": [
+    "Reference",
+    "Project",
+    "Module",
+    "Namespace",
+    "Enum",
+    "EnumMember",
+    "Class",
+    "Interface",
+    "TypeAlias",
+    "Constructor",
+    "Property",
+    "Variable",
+    "Function",
+    "Accessor",
+    "Method"
+  ],
+  "categorizeByGroup": true,
+  "categoryOrder": ["Validators", "Formatters", "DateTime", "Schemas", "*"]
+}

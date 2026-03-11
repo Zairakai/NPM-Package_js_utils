@@ -1,93 +1,270 @@
-# JS Utils
+# @zairakai/js-utils
 
+[![Main][pipeline-main-badge]][pipeline-main-link]
+[![Develop][pipeline-develop-badge]][pipeline-develop-link]
+[![Coverage][coverage-badge]][coverage-link]
 
+[![npm][npm-badge]][npm-link]
+[![GitLab Release][gitlab-release-badge]][gitlab-release]
+[![License][license-badge]][license]
 
-## Getting started
+[![Node.js][node-badge]][node]
+[![ESLint][eslint-badge]][eslint]
+[![Prettier][prettier-badge]][prettier]
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Collection of JavaScript utility functions for string manipulation, validation, and formatting. Inspired by Laravel's helpers with modern TypeScript support.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+---
 
-## Add your files
+## Features
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+- **Fluent Strings (`str`)** — Chained string manipulation (title, slug, limit, etc.)
+- **Fluent Numbers (`num`)** — Formatting (currency, filesize), abbreviating, and calculations
+- **Fluent Objects (`obj`)** — Dot notation access, deep merging, and state tracking (dirty/clean)
+- **Enhanced Collections** — Laravel-like collection methods for arrays and maps
+- **Runtime Validation (`validator`)** — Zod-powered validation with a familiar API
+- **PHP-like Arrays** — Direct API parity for PHP's array functions (`array_chunk`, `array_merge`, etc.)
+- **Runtime Schemas** — Pre-defined Zod schemas for common data types (Email, Phone, URL, etc.)
+- **Deep Equality** — Robust deep comparison and diffing utilities
+- **Type Guards** — Reliable type checking (isRecord, isEmail, etc.)
+- **DateTime** — Lightweight wrapper around dayjs with useful presets
 
+---
+
+## Install
+
+```bash
+npm install @zairakai/js-utils
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/zairakai/npm-packages/js-utils.git
-git branch -M main
-git push -uf origin main
+
+To use `validator` and `schemas` features, install `zod` (optional peer dependency):
+
+```bash
+npm install zod
 ```
 
-## Integrate with your tools
+---
 
-* [Set up project integrations](https://gitlab.com/zairakai/npm-packages/js-utils/-/settings/integrations)
+## Usage Examples
 
-## Collaborate with your team
+### Fluent Strings
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+```typescript
+import { str } from '@zairakai/js-utils'
 
-## Test and Deploy
+const result = str('hello world').title().append(' extra').slug().get() // "hello-world-extra"
+```
 
-Use the built-in continuous integration in GitLab.
+### Fluent Numbers
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+```typescript
+import { num } from '@zairakai/js-utils'
 
-***
+num(1024).fileSize() // "1 KB"
+num(1500).abbreviate() // "1.5K"
+num(10).add(5).mul(2).get() // 30
+```
 
-# Editing this README
+### State Tracking (Dirty)
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+```typescript
+import { obj } from '@zairakai/js-utils'
 
-## Suggestions for a good README
+const user = obj({ name: 'John', status: 'active' })
+user.dataSet('name', 'Jane')
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+user.isDirty() // true
+user.getDirty() // { name: 'Jane' }
+user.syncOriginal() // Mark as clean
+```
 
-## Name
-Choose a self-explaining name for your project.
+### Validation
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+```typescript
+import { validator } from '@zairakai/js-utils'
+import { z } from 'zod'
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+const v = validator(data, {
+  email: z.string().email(),
+  age: z.number().min(18),
+})
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+if (v.fails()) {
+  console.log(v.errors())
+}
+```
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+---
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+## API Reference
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+<details>
+<summary><strong>Fluent Strings (str / Stringable)</strong></summary>
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+| Method                        | Description                                             |
+| ----------------------------- | ------------------------------------------------------- |
+| `append(...values)`           | Append the given values to the string.                  |
+| `camel()`                     | Convert the string to camelCase.                        |
+| `capitalize()`                | Capitalize the first character.                         |
+| `contains(needles)`           | Determine if the string contains any of the needles.    |
+| `containsAll(needles)`        | Determine if the string contains all of the needles.    |
+| `endsWith(needles)`           | Determine if the string ends with any of the needles.   |
+| `finish(cap)`                 | Cap the string with a single instance of a given value. |
+| `get()` / `toString()`        | Get the raw string value.                               |
+| `kebab()`                     | Convert the string to kebab-case.                       |
+| `limit(size, end)`            | Limit the number of characters in a string.             |
+| `lower()`                     | Convert the string to lower case.                       |
+| `mask(char, index, length)`   | Mask a portion of the string with a character.          |
+| `prepend(...values)`          | Prepend the given values to the string.                 |
+| `replace(search, replace)`    | Replace the first occurrence of a value.                |
+| `replaceAll(search, replace)` | Replace all occurrences of a value.                     |
+| `reverse()`                   | Reverse the string.                                     |
+| `slug()`                      | Convert the string to a URL friendly slug.              |
+| `snake()`                     | Convert the string to snake_case.                       |
+| `start(prefix)`               | Begin a string with a single instance of a given value. |
+| `startsWith(needles)`         | Determine if the string starts with any of the needles. |
+| `studly()`                    | Convert the string to StudlyCase.                       |
+| `title()`                     | Convert the string to Title Case.                       |
+| `trim(chars?)`                | Trim the string (optional custom characters).           |
+| `upper()`                     | Convert the string to upper case.                       |
+| `when(condition, callback)`   | Conditionally execute a callback.                       |
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+</details>
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+<details>
+<summary><strong>Fluent Numbers (num / Numberable)</strong></summary>
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+| Method                           | Description                                        |
+| -------------------------------- | -------------------------------------------------- |
+| `abbreviate(precision)`          | Abbreviate the number (e.g., 1K, 1.5M).            |
+| `add(value)` / `sub(value)`      | Arithmetic operations.                             |
+| `mul(value)` / `div(value)`      | Arithmetic operations.                             |
+| `ceil()` / `floor()` / `round()` | Rounding operations.                               |
+| `clamp(min, max)`                | Clamp the number between min and max.              |
+| `currency(code, locale)`         | Format as currency (default: USD).                 |
+| `fileSize(precision)`            | Format as human-readable file size (KB, MB, etc.). |
+| `format(decimals, locale)`       | Format the number with locale-specific separators. |
+| `isBetween(min, max)`            | Check if number is between min and max.            |
+| `ordinal()`                      | Add an ordinal suffix (1st, 2nd, 3rd...).          |
+| `percentage(decimals)`           | Format as a percentage.                            |
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+</details>
 
-## License
-For open source projects, say how it is licensed.
+<details>
+<summary><strong>Fluent Objects (obj / Objectable)</strong></summary>
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+| Method                  | Description                                                    |
+| ----------------------- | -------------------------------------------------------------- |
+| `clone()`               | Deep clone the object.                                         |
+| `dataGet(key, default)` | Get a value using dot notation (e.g., `user.profile.id`).      |
+| `dataSet(key, value)`   | Set a value using dot notation.                                |
+| `except(keys)`          | Get all properties except those specified.                     |
+| `filter(callback)`      | Filter object properties.                                      |
+| `getDirty()`            | Get the properties that have been modified.                    |
+| `isDirty(key?)`         | Determine if the object (or a specific key) has been modified. |
+| `map(callback)`         | Map over the object properties.                                |
+| `merge(other)`          | Shallow merge with another object.                             |
+| `mergeDeep(other)`      | Recursive deep merge.                                          |
+| `only(keys)`            | Get only the specified properties.                             |
+| `syncOriginal()`        | Sync current state as the "clean" state.                       |
+
+</details>
+
+<details>
+<summary><strong>Enhanced Collections (collect / EnhancedArray / EnhancedMap)</strong></summary>
+
+Extends native `Array` and `Map` with 50+ methods including:
+
+- **Navigation**: `at(index)`, `before(item)`, `after(item)`
+- **Transformation**: `pluck(key)`, `groupBy(key)`, `unique(key)`, `chunk(size)`, `chunkBy(key)`, `deepFlatten()`, `transpose()`, `filterMap(cb)`, `extract(keys)`, `rotate(n)`, `getNth(n)`
+- **Statistical**: `median()`, `mode()`, `standardDeviation()`, `percentile(p)`, `frequencies()`
+- **Advanced**: `cartesian(...arrays)`, `interleave(...arrays)`, `sliding(size, step)`, `paginate(perPage, page)`, `weightedRandom(weights?)`, `recursive()`
+- **State**: `isDirty()`, `isClean()`, `syncOriginal()`, `isEquivalent(other)`
+
+</details>
+
+<details>
+<summary><strong>PHP-like Arrays (php_array)</strong></summary>
+
+Provides direct API parity for PHP's array functions (only those that add value beyond native JS):
+`array_chunk`, `array_filter`, `array_map`, `array_reduce`, `array_merge`, `array_unique`, `array_reverse`, `array_slice`, `array_splice`, `array_keys`, `array_search`, `array_key_exists`, `array_pop`, `array_push`, `array_shift`, `array_unshift`, `array_sum`, `array_product`, `array_rand`, `array_flip`, `array_count_values`, `array_intersect`, `array_diff`, `array_column`, `range`, and sorting functions (`sort`, `rsort`, `usort`, `uasort`, `uksort`, `shuffle`).
+
+</details>
+
+<details>
+<summary><strong>Runtime Schemas</strong></summary>
+
+Pre-defined Zod schemas and TypeScript types for common primitives:
+
+- `EmailSchema` / `Email`
+- `PhoneSchema` / `Phone`
+- `UrlSchema` / `Url`
+- `DateSchema`
+- `ApiResponseSchema<T>` / `ApiResponse<T>`
+- `PaginationSchema` / `Pagination`
+- `PaginatedResponseSchema<T>` / `PaginatedResponse<T>`
+
+Utility functions: `validateSchema(schema, data)`, `safeValidateSchema(schema, data)`.
+
+> Requires `zod` — install separately (`npm install zod`).
+
+</details>
+
+<details>
+<summary><strong>Standard Utilities</strong></summary>
+
+- **Validators**: `isEmail`, `isUrl`, `isUuid`, `isIp`, `isMacAddress`, `isRecord`, `isInteger`, etc.
+- **Formatters**: `snakeCase`, `kebabCase`, `camelCase`, `slugify`, `numberFormat`, etc.
+- **Runtime**: `tap`, `when(condition, () => R)`, `retry`, `optional`, `data_get`, `data_set`, `throw_if`, `throw_unless`.
+- **Deep Equality**: `isEqual(a, b)`, `diff(original, current)`.
+- **DateTime**: `now()`, `today()`, `tomorrow()`, `yesterday()`, `isBetweenDates(date, start, end)`, `fromNow(date)`, `isToday(date)`, `isPast(date)`, `isFuture(date)`.
+
+</details>
+
+---
+
+## Development
+
+```bash
+npm test              # run vitest
+npm run build         # build with tsup
+npm run docs          # generate TypeDoc documentation
+npm run typecheck     # run tsc
+make quality          # run full quality suite
+```
+
+---
+
+## Getting Help
+
+[![License][license-badge]][license]
+[![Security Policy][security-badge]][security]
+[![Issues][issues-badge]][issues]
+
+**Made with ❤️ by [Zairakai][ecosystem]**
+
+<!-- Reference Links -->
+
+[pipeline-main-badge]: https://gitlab.com/zairakai/npm-packages/js-utils/badges/main/pipeline.svg?ignore_skipped=true&key_text=Main
+[pipeline-main-link]: https://gitlab.com/zairakai/npm-packages/js-utils/-/commits/main
+[pipeline-develop-badge]: https://gitlab.com/zairakai/npm-packages/js-utils/badges/develop/pipeline.svg?ignore_skipped=true&key_text=Develop
+[pipeline-develop-link]: https://gitlab.com/zairakai/npm-packages/js-utils/-/commits/develop
+[coverage-badge]: https://gitlab.com/zairakai/npm-packages/js-utils/badges/main/coverage.svg
+[coverage-link]: https://gitlab.com/zairakai/npm-packages/js-utils/-/pipelines?ref=main
+[npm-badge]: https://img.shields.io/npm/v/@zairakai/js-utils
+[npm-link]: https://www.npmjs.com/package/@zairakai/js-utils
+[gitlab-release-badge]: https://img.shields.io/gitlab/v/release/zairakai/npm-packages/js-utils?logo=gitlab
+[gitlab-release]: https://gitlab.com/zairakai/npm-packages/js-utils/-/releases
+[license-badge]: https://img.shields.io/badge/license-MIT-blue.svg
+[license]: ./LICENSE
+[security-badge]: https://img.shields.io/badge/security-scanned-green.svg
+[security]: ./SECURITY.md
+[issues-badge]: https://img.shields.io/gitlab/issues/open-raw/zairakai%2Fnpm-packages%2Fhelpers?logo=gitlab&label=Issues
+[issues]: https://gitlab.com/zairakai/npm-packages/js-utils/-/issues
+[node-badge]: https://img.shields.io/badge/node.js-%3E%3D22-green.svg?logo=node.js
+[node]: https://nodejs.org
+[eslint-badge]: https://img.shields.io/badge/code%20style-eslint-4B32C3.svg?logo=eslint
+[eslint]: https://eslint.org
+[prettier-badge]: https://img.shields.io/badge/formatter-prettier-F7B93E.svg?logo=prettier
+[prettier]: https://prettier.io
+[ecosystem]: https://gitlab.com/zairakai
