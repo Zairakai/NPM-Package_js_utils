@@ -5,5 +5,5 @@
 export default {
   project: ['src/**/*.ts'],
   ignoreBinaries: ['eslint', 'prettier', 'markdownlint', 'make'],
-  ignoreDependencies: ['sort-package-json', 'zod'],
+  ignoreDependencies: ['sort-package-json'],
 }
