@@ -100,7 +100,7 @@ describe('New Helpers Integration', () => {
   describe('Object fluent helper', () => {
     it('can filter and map objects', () => {
       const result = obj({ a: 1, b: 2, c: 3 })
-        .filter((v) => (v as number) > 1)
+        .filter((v) => 1 < (v as number))
         .map((v) => (v as number) * 2)
 
       expect(result).toEqual({ b: 4, c: 6 })
@@ -152,7 +152,7 @@ describe('New Helpers Integration', () => {
       let attempts = 0
       const result = await retry(3, () => {
         attempts++
-        if (attempts < 2) throw new Error('Fail')
+        if (2 > attempts) throw new Error('Fail')
         return 'success'
       })
       expect(result).toBe('success')
@@ -164,7 +164,7 @@ describe('New Helpers Integration', () => {
     it('can pipe values through functions', () => {
       const result = pipe('hello')
         .through((s) => s.toUpperCase())
-        .through((s) => s + ' WORLD')
+        .through((s) => `${s} WORLD`)
         .value()
 
       expect(result).toBe('HELLO WORLD')

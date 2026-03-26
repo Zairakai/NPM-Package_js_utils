@@ -152,7 +152,7 @@ describe('retry()', () => {
       3,
       () => {
         attempts++
-        if (attempts < 3) throw new Error('not yet')
+        if (3 > attempts) throw new Error('not yet')
         return 'done'
       },
       1

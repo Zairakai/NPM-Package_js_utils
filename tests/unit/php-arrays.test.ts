@@ -51,7 +51,7 @@ describe('array_filter()', () => {
   })
 
   it('filters with callback', () => {
-    expect(array_filter([1, 2, 3, 4], (v) => v % 2 === 0)).toEqual([2, 4])
+    expect(array_filter([1, 2, 3, 4], (v) => 0 === v % 2)).toEqual([2, 4])
   })
 })
 

@@ -46,7 +46,7 @@ describe('EnhancedArray', () => {
 
   it('groupBy() with callback', () => {
     const arr = EnhancedArray.from([1, 2, 3, 4])
-    const groups = arr.groupBy((n) => (n % 2 === 0 ? 'even' : 'odd'))
+    const groups = arr.groupBy((n) => (0 === n % 2 ? 'even' : 'odd'))
     expect(groups['even']).toHaveLength(2)
     expect(groups['odd']).toHaveLength(2)
   })
@@ -141,7 +141,7 @@ describe('EnhancedArray', () => {
 
   it('filterMap() filters and transforms', () => {
     const arr = EnhancedArray.from([1, 2, 3, 4])
-    const result = arr.filterMap((n) => (n % 2 === 0 ? n * 10 : null))
+    const result = arr.filterMap((n) => (0 === n % 2 ? n * 10 : null))
     expect([...result]).toEqual([20, 40])
   })
 
@@ -196,7 +196,7 @@ describe('EnhancedArray', () => {
   it('chunkWhile() groups consecutive matching items', () => {
     const arr = EnhancedArray.from([1, 2, 4, 9, 10, 11, 12, 15])
     // chunkWhile receives (item, index) — split when consecutive condition fails
-    const chunks = arr.chunkWhile((n, i) => i > 0 && n === arr[i - 1] + 1)
+    const chunks = arr.chunkWhile((n, i) => 0 < i && n === arr[i - 1] + 1)
     expect(chunks.length).toBeGreaterThan(1)
   })
 
@@ -264,7 +264,7 @@ describe('EnhancedMap', () => {
       ['b', 2],
       ['c', 3],
     ])
-    const groups = map.groupBy((v) => (v % 2 === 0 ? 'even' : 'odd'))
+    const groups = map.groupBy((v) => (0 === v % 2 ? 'even' : 'odd'))
     expect(groups['even']).toHaveLength(1)
     expect(groups['odd']).toHaveLength(2)
   })

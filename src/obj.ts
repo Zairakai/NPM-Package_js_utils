@@ -196,10 +196,10 @@ export class Objectable<T extends Record<string, unknown>> {
         const srcVal = source[key]
         const tgtVal = target[key]
         if (
-          srcVal !== null &&
+          null !== srcVal &&
           'object' === typeof srcVal &&
           !Array.isArray(srcVal) &&
-          tgtVal !== null &&
+          null !== tgtVal &&
           'object' === typeof tgtVal &&
           !Array.isArray(tgtVal)
         ) {

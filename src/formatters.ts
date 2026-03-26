@@ -9,7 +9,7 @@
  * @returns {string} The capitalized string
  */
 export const capitalize = (value: unknown): string => {
-  if (value == null) {
+  if (null == value) {
     return ''
   }
 
