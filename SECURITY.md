@@ -7,11 +7,11 @@
 
 ## 🔒 Reporting Vulnerabilities
 
-| Channel | Description | Contact / Link |
-| :---------------- | :------------------------------------------------------- | :---------------------------------------------------------------------------------- |
-| **GitLab Issues** | For non-sensitive issues (bugs, public vulnerabilities). | [Open Issue][issues] |
-| **Service Desk** | Preferred channel for sensitive reports. | `contact-project+zairakai-npm-packages-js-utils-80189643-issue-@incoming.gitlab.com` |
-| **Email** | Alternative secure contact. | `security@the-white-rabbits.fr` |
+| Channel           | Description                                              | Contact / Link                                                                       |
+| :---------------- | :------------------------------------------------------- | :----------------------------------------------------------------------------------- |
+| **GitLab Issues** | For non-sensitive issues (bugs, public vulnerabilities). | [Open Issue][issues]                                                                 |
+| **Service Desk**  | Preferred channel for sensitive reports.                 | `contact-project+zairakai-npm-packages-js-utils-80189643-issue-@incoming.gitlab.com` |
+| **Email**         | Alternative secure contact.                              | `security@the-white-rabbits.fr`                                                      |
 
 Please **do not disclose vulnerabilities publicly** until they have been reviewed.
 
@@ -21,10 +21,10 @@ Please **do not disclose vulnerabilities publicly** until they have been reviewe
 
 ### Protection Layers
 
-| Layer | Security Protection |
+| Layer               | Security Protection                                  |
 | :------------------ | :--------------------------------------------------- |
 | **Static Analysis** | Strict TypeScript configs and ESLint security rules. |
-| **CI Pipeline** | Automated secret detection in GitLab CI. |
+| **CI Pipeline**     | Automated secret detection in GitLab CI.             |
 
 ---
 
