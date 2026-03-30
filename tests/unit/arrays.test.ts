@@ -87,11 +87,11 @@ describe('arrayFirst()', () => {
   })
 
   it('returns first matching element with callback', () => {
-    expect(arrayFirst([1, 2, 3, 4], (n) => n > 2)).toBe(3)
+    expect(arrayFirst([1, 2, 3, 4], (n) => 2 < n)).toBe(3)
   })
 
   it('returns default when no match found', () => {
-    expect(arrayFirst([1, 2], (n) => n > 10, 0)).toBe(0)
+    expect(arrayFirst([1, 2], (n) => 10 < n, 0)).toBe(0)
   })
 
   it('returns default for non-array input', () => {
@@ -159,7 +159,7 @@ describe('arrayOnly()', () => {
 
 describe('arrayWhere()', () => {
   it('filters array with callback', () => {
-    expect(arrayWhere([1, 2, 3, 4], (n) => n % 2 === 0)).toEqual([2, 4])
+    expect(arrayWhere([1, 2, 3, 4], (n) => 0 === n % 2)).toEqual([2, 4])
   })
 
   it('returns empty for non-array input', () => {
@@ -195,7 +195,7 @@ describe('arrayGroupBy()', () => {
 
   it('groups by callback', () => {
     const data = [1, 2, 3, 4]
-    const groups = arrayGroupBy(data, (n) => (n % 2 === 0 ? 'even' : 'odd'))
+    const groups = arrayGroupBy(data, (n) => (0 === n % 2 ? 'even' : 'odd'))
     expect(groups['even']).toEqual([2, 4])
     expect(groups['odd']).toEqual([1, 3])
   })

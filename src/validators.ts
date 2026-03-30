@@ -209,7 +209,7 @@ export const isNotEmpty = (value: unknown): boolean => !isEmpty(value)
  * @returns {boolean} True if the value is blank
  */
 export const isBlank = (value: unknown): boolean => {
-  if (value == null) {
+  if (null == value) {
     return true
   }
   if ('string' === typeof value) {
@@ -348,7 +348,7 @@ export const isIp = (value: unknown): value is string => {
   if (ipv4.test(value)) {
     return value.split('.').every((part) => {
       const n = Number(part)
-      return n >= 0 && n <= 255 && String(n) === part
+      return 0 <= n && 255 >= n && String(n) === part
     })
   }
 
