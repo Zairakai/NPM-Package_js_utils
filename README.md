@@ -31,6 +31,12 @@ Collection of JavaScript utility functions for string manipulation, validation, 
 
 ---
 
+## Documentation
+
+The documentation site has this guide and the reference of the API generated from the source with TypeDoc, for every released version (selector at the top right, `next` is `main`). Build it with `cd docs && npm ci && npm run dev`. It is published with GitLab Pages from `main`.
+
+---
+
 ## Install
 
 ```bash
