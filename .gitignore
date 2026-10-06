@@ -3,9 +3,6 @@
 
 # Build files
 /dist
-# Documentation
-/docs
-
 # Test coverage
 /coverage
 
