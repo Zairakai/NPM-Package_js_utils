@@ -133,7 +133,6 @@
   ],
   "scripts": {
     "build": "tsup --config config/dev-tools/tsup.config.js",
-    "docs": "typedoc --options config/dev-tools/typedoc.json",
     "eslint": "eslint . --config config/dev-tools/eslint.config.js",
     "eslint:fix": "eslint . --config config/dev-tools/eslint.config.js --fix",
     "postinstall": "bash node_modules/@zairakai/js-dev-tools/scripts/setup-project.sh --silent || true",
@@ -161,7 +160,6 @@
     "knip": "^6.4.1",
     "sort-package-json": "^4.0.0",
     "tsup": "^8.0.0",
-    "typedoc": "^0.28.19",
     "typescript": "^6.0.3",
     "vitest": "^5.0.3",
     "zod": "^4.0.0"
