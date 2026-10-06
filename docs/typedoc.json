@@ -1,13 +1,21 @@
 {
-  "entryPoints": ["../../src/index.ts"],
-  "out": "../../docs",
-  "theme": "default",
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["../src/index.ts"],
+  "tsconfig": "../tsconfig.json",
+  "out": "reference",
+  "plugin": ["typedoc-plugin-markdown", "typedoc-vitepress-theme"],
+  "readme": "none",
+  "hideBreadcrumbs": true,
+  "hidePageHeader": true,
+  "excludeExternals": true,
+  "skipErrorChecking": true,
+  "sidebar": {
+    "autoConfiguration": true,
+    "pretty": true
+  },
   "excludePrivate": true,
   "excludeProtected": true,
   "excludeInternal": true,
-  "readme": "../../README.md",
-  "name": "@zairakai/js-utils",
-  "includeVersion": true,
   "sort": ["source-order"],
   "kindSortOrder": [
     "Reference",
