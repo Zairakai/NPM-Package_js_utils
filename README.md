@@ -14,6 +14,8 @@
 
 Collection of JavaScript utility functions for string manipulation, validation, and formatting. Inspired by Laravel's helpers with modern TypeScript support.
 
+**Documentation: <https://js-utils-4f932b.gitlab.io>**
+
 ---
 
 ## Features
@@ -267,7 +269,7 @@ make quality          # run full quality suite
 [security]: ./SECURITY.md
 [issues-badge]: https://img.shields.io/gitlab/issues/open-raw/zairakai%2Fnpm-packages%2Fhelpers?logo=gitlab&label=Issues
 [issues]: https://gitlab.com/zairakai/npm-packages/js-utils/-/issues
-[node-badge]: https://img.shields.io/badge/node.js-%3E%3D22-green.svg?logo=node.js
+[node-badge]: https://img.shields.io/badge/node.js-%3E%3D24-green.svg?logo=node.js
 [node]: https://nodejs.org
 [eslint-badge]: https://img.shields.io/badge/code%20style-eslint-4B32C3.svg?logo=eslint
 [eslint]: https://eslint.org
