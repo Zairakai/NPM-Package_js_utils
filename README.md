@@ -254,6 +254,10 @@ make quality          # run full quality suite
 
 <!-- Reference Links -->
 
+## Statistics
+
+![Statistics of js-utils][stats-card]
+
 [pipeline-main-badge]: https://gitlab.com/zairakai/npm-packages/js-utils/badges/main/pipeline.svg?ignore_skipped=true&key_text=Main
 [pipeline-main-link]: https://gitlab.com/zairakai/npm-packages/js-utils/-/commits/main
 [pipeline-develop-badge]: https://gitlab.com/zairakai/npm-packages/js-utils/badges/develop/pipeline.svg?ignore_skipped=true&key_text=Develop
@@ -279,3 +283,4 @@ make quality          # run full quality suite
 [ecosystem]: https://gitlab.com/zairakai
 [docs]: https://js-utils-4f932b.gitlab.io
 [docs-badge]: https://img.shields.io/badge/docs-online-blue
+[stats-card]: https://gitlab.com/zairakai/gitlab-profile/-/raw/main/assets/projects/js-utils.svg
