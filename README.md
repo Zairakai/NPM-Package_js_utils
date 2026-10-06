@@ -5,6 +5,7 @@
 [![Coverage][coverage-badge]][coverage-link]
 
 [![npm][npm-badge]][npm-link]
+[![Docs][docs-badge]][docs]
 [![GitLab Release][gitlab-release-badge]][gitlab-release]
 [![License][license-badge]][license]
 
@@ -14,7 +15,7 @@
 
 Collection of JavaScript utility functions for string manipulation, validation, and formatting. Inspired by Laravel's helpers with modern TypeScript support.
 
-**Documentation: <https://js-utils-4f932b.gitlab.io>**
+**Documentation: [js-utils-4f932b.gitlab.io][docs]**
 
 ---
 
@@ -276,3 +277,5 @@ make quality          # run full quality suite
 [prettier-badge]: https://img.shields.io/badge/formatter-prettier-F7B93E.svg?logo=prettier
 [prettier]: https://prettier.io
 [ecosystem]: https://gitlab.com/zairakai
+[docs]: https://js-utils-4f932b.gitlab.io
+[docs-badge]: https://img.shields.io/badge/docs-online-blue
