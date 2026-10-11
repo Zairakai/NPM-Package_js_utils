@@ -13,18 +13,6 @@
  *   ]
  */
 
-import parserTypeScript from '@typescript-eslint/parser'
 import baseConfig from '@zairakai/js-dev-tools/config/eslint.config.js'
 
-export default [
-  ...baseConfig,
-  {
-    files: ['tests/**/*.ts', '**/*.test.ts', '**/*.spec.ts'],
-    languageOptions: {
-      parser: parserTypeScript,
-      parserOptions: {
-        project: './tsconfig.test.json',
-      },
-    },
-  },
-]
+export default [...baseConfig]
