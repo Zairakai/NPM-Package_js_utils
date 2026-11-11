@@ -30,9 +30,21 @@ export class EnhancedArray<T> extends Array<T> {
    * @param {...T[]} items The items to initialize the collection with
    */
   constructor(...items: T[]) {
-    super(...items)
+    // Never `super(...items)`: a single number would be read as a length, not as an item
+    super()
     Object.setPrototypeOf(this, EnhancedArray.prototype)
+    this.push(...items)
     this.originalItems = structuredClone(items)
+  }
+
+  /**
+   * The constructor used by the native methods (`map`, `filter`, `slice`, `concat`...) to build their result. They call
+   * it with a length, which the constructor reads as an item, so they get a collection of that length instead.
+   *
+   * @returns {ArrayConstructor} The constructor of the results of the native methods
+   */
+  static get [Symbol.species](): ArrayConstructor {
+    return withLength as unknown as ArrayConstructor
   }
 
   /**
@@ -747,6 +759,18 @@ export class EnhancedArray<T> extends Array<T> {
 
     return new EnhancedArray(...this.map(convert))
   }
+}
+
+/**
+ * Build an empty collection of a given length, for the native methods of arrays (see `Symbol.species` above).
+ *
+ * @param {number} length The length of the collection
+ * @returns {EnhancedArray<unknown>} The collection
+ */
+function withLength(length: number): EnhancedArray<unknown> {
+  const collection = new EnhancedArray<unknown>()
+  collection.length = length
+  return collection
 }
 
 // Utility functions for objects and maps
