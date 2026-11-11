@@ -1,6 +1,10 @@
 {
-  "extends": "./config/dev-tools/tsconfig.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@zairakai/js-dev-tools/config/tsconfig.base.json",
   "compilerOptions": {
-    "ignoreDeprecations": "6.0"
-  }
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "build", "**/*.test.ts", "**/*.spec.ts"]
 }

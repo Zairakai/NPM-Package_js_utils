@@ -84,7 +84,7 @@ export class Numberable {
    * @returns {string} The formatted file size (e.g., "1.50 MB")
    */
   fileSize(precision: number = 2): string {
-    if (0 === this.value) {
+    if (this.value === 0) {
       return '0 B'
     }
     const units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
@@ -99,7 +99,7 @@ export class Numberable {
    * @returns {string} The abbreviated number
    */
   abbreviate(precision: number = 1): string {
-    if (1000 > this.value) {
+    if (this.value < 1000) {
       return String(this.value)
     }
     const units = ['', 'K', 'M', 'B', 'T']
@@ -182,7 +182,7 @@ export class Numberable {
    * @returns {this} The Numberable instance
    */
   div(value: number): this {
-    if (0 !== value) {
+    if (value !== 0) {
       this.value /= value
     }
     return this
@@ -242,7 +242,7 @@ export class Numberable {
    * @returns {this} The Numberable instance
    */
   when(condition: boolean | (() => boolean), callback: (num: this) => void): this {
-    const shouldExecute = 'function' === typeof condition ? condition() : condition
+    const shouldExecute = typeof condition === 'function' ? condition() : condition
     if (shouldExecute) {
       callback(this)
     }

@@ -9,7 +9,7 @@
  * @returns {string} The capitalized string
  */
 export const capitalize = (value: unknown): string => {
-  if (null == value) {
+  if (value == null) {
     return ''
   }
 
@@ -37,6 +37,7 @@ export const slugify = (text: unknown): string => {
     .replace(/\s+/g, '-')
     .replace(/[^\w-]+/g, '')
     .replace(/--+/g, '-')
+    .replace(/^-+|-+$/g, '')
 }
 
 /**
@@ -240,7 +241,7 @@ export const strWordCount = (str: string, characters?: string): number => {
   return str
     .trim()
     .split(pattern)
-    .filter((word) => 0 < word.length).length
+    .filter((word) => word.length > 0).length
 }
 
 /**

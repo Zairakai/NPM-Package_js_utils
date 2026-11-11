@@ -9,7 +9,7 @@
  * @param {unknown} value The value to check
  * @returns {value is true} True if the value is strictly true
  */
-export const isTrue = (value: unknown): value is true => true === value
+export const isTrue = (value: unknown): value is true => value === true
 
 /**
  * Check if value is strictly false
@@ -17,7 +17,7 @@ export const isTrue = (value: unknown): value is true => true === value
  * @param {unknown} value The value to check
  * @returns {value is false} True if the value is strictly false
  */
-export const isFalse = (value: unknown): value is false => false === value
+export const isFalse = (value: unknown): value is false => value === false
 
 /**
  * Check if value is strictly null
@@ -25,7 +25,7 @@ export const isFalse = (value: unknown): value is false => false === value
  * @param {unknown} value The value to check
  * @returns {value is null} True if the value is strictly null
  */
-export const isNull = (value: unknown): value is null => null === value
+export const isNull = (value: unknown): value is null => value === null
 
 /**
  * Check if value is strictly undefined
@@ -41,7 +41,7 @@ export const isUndefined = (value: unknown): value is undefined => undefined ===
  * @param {unknown} value The value to check
  * @returns {value is NonNullable<unknown>} True if the value is set
  */
-export const isSet = (value: unknown): value is NonNullable<unknown> => undefined !== value && null !== value
+export const isSet = (value: unknown): value is NonNullable<unknown> => undefined !== value && value !== null
 
 /**
  * Check if value is an array
@@ -58,7 +58,7 @@ export const isArray = (value: unknown): value is unknown[] => Array.isArray(val
  * @returns {value is Record<string, unknown>} True if the value is a plain object
  */
 export const isObject = (value: unknown): value is Record<string, unknown> =>
-  'object' === typeof value && null !== value && !Array.isArray(value)
+  typeof value === 'object' && value !== null && !Array.isArray(value)
 
 /**
  * Check if value is a string
@@ -66,7 +66,7 @@ export const isObject = (value: unknown): value is Record<string, unknown> =>
  * @param {unknown} value The value to check
  * @returns {value is string} True if the value is a string
  */
-export const isString = (value: unknown): value is string => 'string' === typeof value
+export const isString = (value: unknown): value is string => typeof value === 'string'
 
 /**
  * Check if value is a number and not NaN
@@ -74,7 +74,7 @@ export const isString = (value: unknown): value is string => 'string' === typeof
  * @param {unknown} value The value to check
  * @returns {value is number} True if the value is a valid number
  */
-export const isNumber = (value: unknown): value is number => 'number' === typeof value && !isNaN(value)
+export const isNumber = (value: unknown): value is number => typeof value === 'number' && !isNaN(value)
 
 /**
  * Check if value is an integer
@@ -91,7 +91,7 @@ export const isInteger = (value: unknown): value is number => Number.isInteger(v
  * @returns {value is number} True if the value is a float
  */
 export const isFloat = (value: unknown): value is number =>
-  'number' === typeof value && !isNaN(value) && !Number.isInteger(value)
+  typeof value === 'number' && !isNaN(value) && !Number.isInteger(value)
 
 /**
  * Check if value is a boolean
@@ -99,7 +99,7 @@ export const isFloat = (value: unknown): value is number =>
  * @param {unknown} value The value to check
  * @returns {value is boolean} True if the value is a boolean
  */
-export const isBoolean = (value: unknown): value is boolean => 'boolean' === typeof value
+export const isBoolean = (value: unknown): value is boolean => typeof value === 'boolean'
 
 /**
  * Check if value is a function
@@ -107,7 +107,7 @@ export const isBoolean = (value: unknown): value is boolean => 'boolean' === typ
  * @param {unknown} value The value to check
  * @returns {value is Function} True if the value is a function
  */
-export const isFunction = (value: unknown): value is Function => 'function' === typeof value
+export const isFunction = (value: unknown): value is Function => typeof value === 'function'
 
 /**
  * Check if value is a valid Date object
@@ -124,12 +124,12 @@ export const isDate = (value: unknown): value is Date => value instanceof Date &
  * @returns {value is number | string} True if the value is numeric
  */
 export const isNumeric = (value: unknown): value is number | string => {
-  if ('number' === typeof value) {
+  if (typeof value === 'number') {
     return !isNaN(value) && isFinite(value)
   }
-  if ('string' === typeof value) {
+  if (typeof value === 'string') {
     const num = Number(value.trim())
-    return '' !== value.trim() && !isNaN(num) && isFinite(num)
+    return value.trim() !== '' && !isNaN(num) && isFinite(num)
   }
   return false
 }
@@ -141,7 +141,7 @@ export const isNumeric = (value: unknown): value is number | string => {
  * @returns {value is string} True if the value is a valid email string
  */
 export const isEmail = (value: unknown): value is string => {
-  if ('string' !== typeof value) {
+  if (typeof value !== 'string') {
     return false
   }
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -155,7 +155,7 @@ export const isEmail = (value: unknown): value is string => {
  * @returns {value is string} True if the value is a valid URL string
  */
 export const isUrl = (value: unknown): value is string => {
-  if ('string' !== typeof value) {
+  if (typeof value !== 'string') {
     return false
   }
   try {
@@ -177,16 +177,16 @@ export const isEmpty = (value: unknown): boolean => {
     return true
   }
   if (isString(value)) {
-    return 0 === value.trim().length
+    return value.trim().length === 0
   }
   if (isArray(value)) {
-    return 0 === value.length
+    return value.length === 0
   }
   if (isObject(value)) {
-    return 0 === Object.keys(value).length
+    return Object.keys(value).length === 0
   }
   if (isNumber(value)) {
-    return 0 === value
+    return value === 0
   }
   if (isBoolean(value)) {
     return isFalse(value)
@@ -209,11 +209,11 @@ export const isNotEmpty = (value: unknown): boolean => !isEmpty(value)
  * @returns {boolean} True if the value is blank
  */
 export const isBlank = (value: unknown): boolean => {
-  if (null == value) {
+  if (value == null) {
     return true
   }
-  if ('string' === typeof value) {
-    return '' === value.trim()
+  if (typeof value === 'string') {
+    return value.trim() === ''
   }
   return isEmpty(value)
 }
@@ -249,7 +249,7 @@ export const blank = (value: unknown): boolean => isBlank(value)
  * @returns {value is number} True if the value is an even number
  */
 export const isEven = (value: unknown): value is number => {
-  return isNumber(value) && 0 === value % 2
+  return isNumber(value) && value % 2 === 0
 }
 
 /**
@@ -259,7 +259,7 @@ export const isEven = (value: unknown): value is number => {
  * @returns {value is number} True if the value is an odd number
  */
 export const isOdd = (value: unknown): value is number => {
-  return isNumber(value) && 0 !== value % 2
+  return isNumber(value) && value % 2 !== 0
 }
 
 /**
@@ -269,7 +269,7 @@ export const isOdd = (value: unknown): value is number => {
  * @returns {boolean} True if the value is a valid JSON string
  */
 export const isJson = (value: unknown): boolean => {
-  if ('string' !== typeof value) {
+  if (typeof value !== 'string') {
     return false
   }
 
@@ -288,7 +288,7 @@ export const isJson = (value: unknown): boolean => {
  * @returns {boolean} True if the value is a valid Base64 string
  */
 export const isBase64 = (value: unknown): boolean => {
-  if ('string' !== typeof value) {
+  if (typeof value !== 'string') {
     return false
   }
 
@@ -296,7 +296,7 @@ export const isBase64 = (value: unknown): boolean => {
   const base64Pattern = /^[A-Za-z0-9+/]*={0,2}$/
 
   // Check if length is multiple of 4
-  if (0 !== value.length % 4) {
+  if (value.length % 4 !== 0) {
     return false
   }
 
@@ -310,7 +310,7 @@ export const isBase64 = (value: unknown): boolean => {
  * @returns {boolean} True if the value is a valid MAC address
  */
 export const isMacAddress = (value: unknown): boolean => {
-  if ('string' !== typeof value) {
+  if (typeof value !== 'string') {
     return false
   }
 
@@ -326,7 +326,7 @@ export const isMacAddress = (value: unknown): boolean => {
  * @returns {value is string} True if the value is a valid UUID v4 string
  */
 export const isUuid = (value: unknown): value is string => {
-  if ('string' !== typeof value) {
+  if (typeof value !== 'string') {
     return false
   }
   return /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)
@@ -339,7 +339,7 @@ export const isUuid = (value: unknown): value is string => {
  * @returns {value is string} True if the value is a valid IP address string
  */
 export const isIp = (value: unknown): value is string => {
-  if ('string' !== typeof value) {
+  if (typeof value !== 'string') {
     return false
   }
 
@@ -348,7 +348,7 @@ export const isIp = (value: unknown): value is string => {
   if (ipv4.test(value)) {
     return value.split('.').every((part) => {
       const n = Number(part)
-      return 0 <= n && 255 >= n && String(n) === part
+      return n >= 0 && n <= 255 && String(n) === part
     })
   }
 

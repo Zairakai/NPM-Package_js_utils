@@ -65,7 +65,7 @@ export const arrayDot = (array: Record<string, unknown>, prepend = ''): Record<s
   for (const [key, value] of Object.entries(array)) {
     const newKey = prepend ? `${prepend}.${key}` : key
 
-    if (value && 'object' === typeof value && !Array.isArray(value)) {
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
       Object.assign(result, arrayDot(value as Record<string, unknown>, newKey))
     } else {
       result[newKey] = value
@@ -100,14 +100,14 @@ export const arrayExcept = <T>(array: T[], keys: string[]): T[] => {
 export const arrayFirst = <T>(
   array: T[],
   callback?: (item: T, index: number) => boolean,
-  defaultValue?: T
+  defaultValue?: T,
 ): T | undefined => {
   if (!Array.isArray(array)) {
     return defaultValue
   }
 
   if (!callback) {
-    return 0 < array.length ? array[0] : defaultValue
+    return array.length > 0 ? array[0] : defaultValue
   }
 
   for (let i = 0; i < array.length; i++) {
@@ -135,7 +135,7 @@ export const arrayFlatten = <T>(array: unknown[], depth = Infinity): T[] => {
     const result: T[] = []
 
     for (const item of arr) {
-      if (Array.isArray(item) && 0 < currentDepth) {
+      if (Array.isArray(item) && currentDepth > 0) {
         result.push(...flatten(item, currentDepth - 1))
       } else {
         result.push(item as T)
@@ -157,7 +157,7 @@ export const arrayFlatten = <T>(array: unknown[], depth = Infinity): T[] => {
  * @returns {unknown} The value at the key or default value
  */
 export const arrayGet = (array: Record<string, unknown>, key: string, defaultValue?: unknown): unknown => {
-  if (!array || 'object' !== typeof array) {
+  if (!array || typeof array !== 'object') {
     return defaultValue
   }
 
@@ -166,9 +166,9 @@ export const arrayGet = (array: Record<string, unknown>, key: string, defaultVal
 
   for (const k of keys) {
     if (
-      null === current ||
+      current === null ||
       current === undefined ||
-      'object' !== typeof current ||
+      typeof current !== 'object' ||
       !(k in (current as Record<string, unknown>))
     ) {
       return defaultValue
@@ -187,7 +187,7 @@ export const arrayGet = (array: Record<string, unknown>, key: string, defaultVal
  * @returns {boolean} True if all keys exist, false otherwise
  */
 export const arrayHas = (array: Record<string, unknown>, keys: string | string[]): boolean => {
-  if (!array || 'object' !== typeof array) {
+  if (!array || typeof array !== 'object') {
     return false
   }
 
@@ -199,9 +199,9 @@ export const arrayHas = (array: Record<string, unknown>, keys: string | string[]
 
     for (const part of keyParts) {
       if (
-        null === current ||
+        current === null ||
         current === undefined ||
-        'object' !== typeof current ||
+        typeof current !== 'object' ||
         !(part in (current as Record<string, unknown>))
       ) {
         return false
@@ -254,7 +254,7 @@ export const arrayPluck = <T, K extends keyof T>(array: T[], key: K): T[K][] => 
     return []
   }
   return array
-    .map((item) => (item && 'object' === typeof item ? item[key] : undefined))
+    .map((item) => (item && typeof item === 'object' ? item[key] : undefined))
     .filter((value) => value !== undefined) as T[K][]
 }
 
@@ -273,9 +273,9 @@ export const arrayGroupBy = <T>(array: T[], keyOrFn: keyof T | ((item: T) => str
   return array.reduce(
     (groups, item) => {
       const key =
-        'function' === typeof keyOrFn
+        typeof keyOrFn === 'function'
           ? String(keyOrFn(item))
-          : String(item && 'object' === typeof item ? item[keyOrFn] : item)
+          : String(item && typeof item === 'object' ? item[keyOrFn] : item)
 
       if (!groups[key]) {
         groups[key] = []
@@ -284,7 +284,7 @@ export const arrayGroupBy = <T>(array: T[], keyOrFn: keyof T | ((item: T) => str
 
       return groups
     },
-    {} as Record<string, T[]>
+    {} as Record<string, T[]>,
   )
 }
 
@@ -306,7 +306,7 @@ export const arrayUnique = <T>(array: T[], key?: keyof T): T[] => {
 
   const seen = new Set()
   return array.filter((item) => {
-    const value = item && 'object' === typeof item ? item[key] : item
+    const value = item && typeof item === 'object' ? item[key] : item
     if (seen.has(value)) {
       return false
     }

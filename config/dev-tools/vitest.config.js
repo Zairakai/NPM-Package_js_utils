@@ -12,6 +12,7 @@ export default defineConfig({
     globals: true,
     coverage: {
       ...baseCoverage,
+      // cobertura is read by the pipeline (coverage/cobertura-coverage.xml)
       reporter: ['text', 'lcov', 'html', 'cobertura'],
       exclude: [
         ...(baseCoverage.exclude ?? []),

@@ -22,8 +22,8 @@ describe('when()', () => {
       when(
         false,
         () => 'yes',
-        () => 'no'
-      )
+        () => 'no',
+      ),
     ).toBe('no')
   })
 
@@ -35,15 +35,15 @@ describe('when()', () => {
     expect(
       when(
         () => true,
-        () => 'yes'
-      )
+        () => 'yes',
+      ),
     ).toBe('yes')
     expect(
       when(
         () => false,
         () => 'yes',
-        () => 'no'
-      )
+        () => 'no',
+      ),
     ).toBe('no')
   })
 })
@@ -142,7 +142,7 @@ describe('retry()', () => {
     await expect(
       retry(2, () => {
         throw new Error('always fails')
-      })
+      }),
     ).rejects.toThrow('always fails')
   })
 
@@ -155,7 +155,7 @@ describe('retry()', () => {
         if (3 > attempts) throw new Error('not yet')
         return 'done'
       },
-      1
+      1,
     )
     expect(result).toBe('done')
     expect(attempts).toBe(3)

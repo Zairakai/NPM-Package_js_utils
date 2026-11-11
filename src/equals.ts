@@ -16,7 +16,7 @@ export const isEqual = (a: unknown, b: unknown): boolean => {
     return true
   }
 
-  if (a && b && 'object' === typeof a && 'object' === typeof b) {
+  if (a && b && typeof a === 'object' && typeof b === 'object') {
     if (a.constructor !== b.constructor) {
       return false
     }
@@ -105,7 +105,7 @@ export const diff = (original: unknown, current: unknown): GenericRecord => {
     return result
   }
 
-  if (!original || !current || 'object' !== typeof original || 'object' !== typeof current) {
+  if (!original || !current || typeof original !== 'object' || typeof current !== 'object') {
     return (current as GenericRecord) || {}
   }
 
@@ -119,8 +119,8 @@ export const diff = (original: unknown, current: unknown): GenericRecord => {
       if (
         originalObj[key] &&
         currentObj[key] &&
-        'object' === typeof originalObj[key] &&
-        'object' === typeof currentObj[key] &&
+        typeof originalObj[key] === 'object' &&
+        typeof currentObj[key] === 'object' &&
         !Array.isArray(originalObj[key])
       ) {
         result[key] = diff(originalObj[key], currentObj[key])
