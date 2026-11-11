@@ -98,7 +98,7 @@ describe('PaginatedResponseSchema()', () => {
       schema.parse({
         data: [{ id: 1 }, { id: 2 }],
         pagination: { page: 1, perPage: 10, total: 2, lastPage: 1 },
-      })
+      }),
     ).not.toThrow()
   })
 })

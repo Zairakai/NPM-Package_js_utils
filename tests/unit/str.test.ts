@@ -76,7 +76,7 @@ describe('Stringable uncovered branches', () => {
     expect(
       str('hello')
         .when(false, (s) => s.upper())
-        .get()
+        .get(),
     ).toBe('hello')
   })
 
@@ -85,17 +85,17 @@ describe('Stringable uncovered branches', () => {
       str('hello')
         .when(
           () => true,
-          (s) => s.upper()
+          (s) => s.upper(),
         )
-        .get()
+        .get(),
     ).toBe('HELLO')
     expect(
       str('hello')
         .when(
           () => false,
-          (s) => s.upper()
+          (s) => s.upper(),
         )
-        .get()
+        .get(),
     ).toBe('hello')
   })
 })

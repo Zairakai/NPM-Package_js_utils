@@ -1,4 +1,8 @@
-# @zairakai/js-utils
+# JS Utils
+
+![JS Utils](https://gitlab.com/zairakai/npm-packages/js-utils/-/raw/main/assets/banner.png)
+
+`@zairakai/js-utils`
 
 [![Main][pipeline-main-badge]][pipeline-main-link]
 [![Develop][pipeline-develop-badge]][pipeline-develop-link]
@@ -12,8 +16,10 @@
 [![Node.js][node-badge]][node]
 [![ESLint][eslint-badge]][eslint]
 [![Prettier][prettier-badge]][prettier]
+[![Vitest][vitest-badge]][vitest]
+[![Knip][knip-badge]][knip]
 
-Collection of JavaScript utility functions for string manipulation, validation, and formatting. Inspired by Laravel's helpers with modern TypeScript support.
+Zero-dependency utilities for arrays, strings, numbers, objects, dates, validation and formatting. Inspired by Laravel's helpers, with modern TypeScript support.
 
 **Documentation: [js-utils-4f932b.gitlab.io][docs]**
 
@@ -51,6 +57,17 @@ To use `validator` and `schemas` features, install `zod` (optional peer dependen
 ```bash
 npm install zod
 ```
+
+### In the browser
+
+The library is made for the web: ESM and CommonJS builds, no Node.js built-ins, `"sideEffects": false`. A bundler keeps only what you import (the tests of this repository check it with esbuild): a project that imports `strLimit` does not carry `dayjs` or `zod`. `dayjs` comes with the date helpers only, `zod` with the validator and the schemas only. Each family of helpers also has its own entry point:
+
+```js
+import { strLimit } from '@zairakai/js-utils'
+import { today } from '@zairakai/js-utils/datetime'
+```
+
+There is no minimum browser version: the library uses `structuredClone`, so the browsers that you target must have it (or a polyfill).
 
 ---
 
@@ -108,79 +125,79 @@ if (v.fails()) {
 ## API Reference
 
 <details>
-<summary><strong>Fluent Strings (str / Stringable)</strong></summary>
+<summary>**Fluent Strings (str / Stringable)**</summary>
 
-| Method                        | Description                                             |
-| ----------------------------- | ------------------------------------------------------- |
-| `append(...values)`           | Append the given values to the string.                  |
-| `camel()`                     | Convert the string to camelCase.                        |
-| `capitalize()`                | Capitalize the first character.                         |
-| `contains(needles)`           | Determine if the string contains any of the needles.    |
-| `containsAll(needles)`        | Determine if the string contains all of the needles.    |
-| `endsWith(needles)`           | Determine if the string ends with any of the needles.   |
-| `finish(cap)`                 | Cap the string with a single instance of a given value. |
-| `get()` / `toString()`        | Get the raw string value.                               |
-| `kebab()`                     | Convert the string to kebab-case.                       |
-| `limit(size, end)`            | Limit the number of characters in a string.             |
-| `lower()`                     | Convert the string to lower case.                       |
-| `mask(char, index, length)`   | Mask a portion of the string with a character.          |
-| `prepend(...values)`          | Prepend the given values to the string.                 |
-| `replace(search, replace)`    | Replace the first occurrence of a value.                |
-| `replaceAll(search, replace)` | Replace all occurrences of a value.                     |
-| `reverse()`                   | Reverse the string.                                     |
-| `slug()`                      | Convert the string to a URL friendly slug.              |
-| `snake()`                     | Convert the string to snake_case.                       |
-| `start(prefix)`               | Begin a string with a single instance of a given value. |
-| `startsWith(needles)`         | Determine if the string starts with any of the needles. |
-| `studly()`                    | Convert the string to StudlyCase.                       |
-| `title()`                     | Convert the string to Title Case.                       |
-| `trim(chars?)`                | Trim the string (optional custom characters).           |
-| `upper()`                     | Convert the string to upper case.                       |
-| `when(condition, callback)`   | Conditionally execute a callback.                       |
-
-</details>
-
-<details>
-<summary><strong>Fluent Numbers (num / Numberable)</strong></summary>
-
-| Method                           | Description                                        |
-| -------------------------------- | -------------------------------------------------- |
-| `abbreviate(precision)`          | Abbreviate the number (e.g., 1K, 1.5M).            |
-| `add(value)` / `sub(value)`      | Arithmetic operations.                             |
-| `mul(value)` / `div(value)`      | Arithmetic operations.                             |
-| `ceil()` / `floor()` / `round()` | Rounding operations.                               |
-| `clamp(min, max)`                | Clamp the number between min and max.              |
-| `currency(code, locale)`         | Format as currency (default: USD).                 |
-| `fileSize(precision)`            | Format as human-readable file size (KB, MB, etc.). |
-| `format(decimals, locale)`       | Format the number with locale-specific separators. |
-| `isBetween(min, max)`            | Check if number is between min and max.            |
-| `ordinal()`                      | Add an ordinal suffix (1st, 2nd, 3rd...).          |
-| `percentage(decimals)`           | Format as a percentage.                            |
+| Method | Description |
+| :--- | :--- |
+| `append(...values)` | Append the given values to the string. |
+| `camel()` | Convert the string to camelCase. |
+| `capitalize()` | Capitalize the first character. |
+| `contains(needles)` | Determine if the string contains any of the needles. |
+| `containsAll(needles)` | Determine if the string contains all of the needles. |
+| `endsWith(needles)` | Determine if the string ends with any of the needles. |
+| `finish(cap)` | Cap the string with a single instance of a given value. |
+| `get()` / `toString()` | Get the raw string value. |
+| `kebab()` | Convert the string to kebab-case. |
+| `limit(size, end)` | Limit the number of characters in a string. |
+| `lower()` | Convert the string to lower case. |
+| `mask(char, index, length)` | Mask a portion of the string with a character. |
+| `prepend(...values)` | Prepend the given values to the string. |
+| `replace(search, replace)` | Replace the first occurrence of a value. |
+| `replaceAll(search, replace)` | Replace all occurrences of a value. |
+| `reverse()` | Reverse the string. |
+| `slug()` | Convert the string to a URL friendly slug. |
+| `snake()` | Convert the string to snake_case. |
+| `start(prefix)` | Begin a string with a single instance of a given value. |
+| `startsWith(needles)` | Determine if the string starts with any of the needles. |
+| `studly()` | Convert the string to StudlyCase. |
+| `title()` | Convert the string to Title Case. |
+| `trim(chars?)` | Trim the string (optional custom characters). |
+| `upper()` | Convert the string to upper case. |
+| `when(condition, callback)` | Conditionally execute a callback. |
 
 </details>
 
 <details>
-<summary><strong>Fluent Objects (obj / Objectable)</strong></summary>
+<summary>**Fluent Numbers (num / Numberable)**</summary>
 
-| Method                  | Description                                                    |
-| ----------------------- | -------------------------------------------------------------- |
-| `clone()`               | Deep clone the object.                                         |
-| `dataGet(key, default)` | Get a value using dot notation (e.g., `user.profile.id`).      |
-| `dataSet(key, value)`   | Set a value using dot notation.                                |
-| `except(keys)`          | Get all properties except those specified.                     |
-| `filter(callback)`      | Filter object properties.                                      |
-| `getDirty()`            | Get the properties that have been modified.                    |
-| `isDirty(key?)`         | Determine if the object (or a specific key) has been modified. |
-| `map(callback)`         | Map over the object properties.                                |
-| `merge(other)`          | Shallow merge with another object.                             |
-| `mergeDeep(other)`      | Recursive deep merge.                                          |
-| `only(keys)`            | Get only the specified properties.                             |
-| `syncOriginal()`        | Sync current state as the "clean" state.                       |
+| Method | Description |
+| :--- | :--- |
+| `abbreviate(precision)` | Abbreviate the number (e.g., 1K, 1.5M). |
+| `add(value)` / `sub(value)` | Arithmetic operations. |
+| `mul(value)` / `div(value)` | Arithmetic operations. |
+| `ceil()` / `floor()` / `round()` | Rounding operations. |
+| `clamp(min, max)` | Clamp the number between min and max. |
+| `currency(code, locale)` | Format as currency (default: USD). |
+| `fileSize(precision)` | Format as human-readable file size (KB, MB, etc.). |
+| `format(decimals, locale)` | Format the number with locale-specific separators. |
+| `isBetween(min, max)` | Check if number is between min and max. |
+| `ordinal()` | Add an ordinal suffix (1st, 2nd, 3rd...). |
+| `percentage(decimals)` | Format as a percentage. |
 
 </details>
 
 <details>
-<summary><strong>Enhanced Collections (collect / EnhancedArray / EnhancedMap)</strong></summary>
+<summary>**Fluent Objects (obj / Objectable)**</summary>
+
+| Method | Description |
+| :--- | :--- |
+| `clone()` | Deep clone the object. |
+| `dataGet(key, default)` | Get a value using dot notation (e.g., `user.profile.id`). |
+| `dataSet(key, value)` | Set a value using dot notation. |
+| `except(keys)` | Get all properties except those specified. |
+| `filter(callback)` | Filter object properties. |
+| `getDirty()` | Get the properties that have been modified. |
+| `isDirty(key?)` | Determine if the object (or a specific key) has been modified. |
+| `map(callback)` | Map over the object properties. |
+| `merge(other)` | Shallow merge with another object. |
+| `mergeDeep(other)` | Recursive deep merge. |
+| `only(keys)` | Get only the specified properties. |
+| `syncOriginal()` | Sync current state as the "clean" state. |
+
+</details>
+
+<details>
+<summary>**Enhanced Collections (collect / EnhancedArray / EnhancedMap)**</summary>
 
 Extends native `Array` and `Map` with 50+ methods including:
 
@@ -193,7 +210,7 @@ Extends native `Array` and `Map` with 50+ methods including:
 </details>
 
 <details>
-<summary><strong>PHP-like Arrays (php_array)</strong></summary>
+<summary>**PHP-like Arrays (php_array)**</summary>
 
 Provides direct API parity for PHP's array functions (only those that add value beyond native JS):
 `array_chunk`, `array_filter`, `array_map`, `array_reduce`, `array_merge`, `array_unique`, `array_reverse`, `array_slice`, `array_splice`, `array_keys`, `array_search`, `array_key_exists`, `array_pop`, `array_push`, `array_shift`, `array_unshift`, `array_sum`, `array_product`, `array_rand`, `array_flip`, `array_count_values`, `array_intersect`, `array_diff`, `array_column`, `range`, and sorting functions (`sort`, `rsort`, `usort`, `uasort`, `uksort`, `shuffle`).
@@ -201,7 +218,7 @@ Provides direct API parity for PHP's array functions (only those that add value 
 </details>
 
 <details>
-<summary><strong>Runtime Schemas</strong></summary>
+<summary>**Runtime Schemas**</summary>
 
 Pre-defined Zod schemas and TypeScript types for common primitives:
 
@@ -220,7 +237,7 @@ Utility functions: `validateSchema(schema, data)`, `safeValidateSchema(schema, d
 </details>
 
 <details>
-<summary><strong>Standard Utilities</strong></summary>
+<summary>**Standard Utilities**</summary>
 
 - **Validators**: `isEmail`, `isUrl`, `isUuid`, `isIp`, `isMacAddress`, `isRecord`, `isInteger`, etc.
 - **Formatters**: `snakeCase`, `kebabCase`, `camelCase`, `slugify`, `numberFormat`, etc.
@@ -280,6 +297,10 @@ make quality          # run full quality suite
 [eslint]: https://eslint.org
 [prettier-badge]: https://img.shields.io/badge/formatter-prettier-F7B93E.svg?logo=prettier
 [prettier]: https://prettier.io
+[vitest-badge]: https://img.shields.io/badge/test-vitest-6E9F18.svg?logo=vitest
+[vitest]: https://vitest.dev
+[knip-badge]: https://img.shields.io/badge/dead%20code-knip-EC4899.svg
+[knip]: https://knip.dev
 [ecosystem]: https://gitlab.com/zairakai
 [docs]: https://js-utils-4f932b.gitlab.io
 [docs-badge]: https://img.shields.io/badge/docs-online-blue

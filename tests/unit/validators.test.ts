@@ -262,3 +262,17 @@ describe('isIp()', () => {
     expect(isIp(42 as any)).toBe(false)
   })
 })
+
+describe('validators (values that are not strings, and unusual values)', () => {
+  it('isEmail() and isUrl() refuse a value that is not a string', () => {
+    expect(isEmail(42)).toBe(false)
+    expect(isEmail(null)).toBe(false)
+    expect(isUrl(42)).toBe(false)
+    expect(isUrl(undefined)).toBe(false)
+  })
+
+  it('isEmpty() treats a function or a symbol as not empty', () => {
+    expect(isEmpty(() => undefined)).toBe(false)
+    expect(isEmpty(Symbol('x'))).toBe(false)
+  })
+})

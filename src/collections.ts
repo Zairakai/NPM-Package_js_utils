@@ -30,9 +30,21 @@ export class EnhancedArray<T> extends Array<T> {
    * @param {...T[]} items The items to initialize the collection with
    */
   constructor(...items: T[]) {
-    super(...items)
+    // Never `super(...items)`: a single number would be read as a length, not as an item
+    super()
     Object.setPrototypeOf(this, EnhancedArray.prototype)
+    this.push(...items)
     this.originalItems = structuredClone(items)
+  }
+
+  /**
+   * The constructor used by the native methods (`map`, `filter`, `slice`, `concat`...) to build their result. They call
+   * it with a length, which the constructor reads as an item, so they get a collection of that length instead.
+   *
+   * @returns {ArrayConstructor} The constructor of the results of the native methods
+   */
+  static get [Symbol.species](): ArrayConstructor {
+    return withLength as unknown as ArrayConstructor
   }
 
   /**
@@ -111,9 +123,9 @@ export class EnhancedArray<T> extends Array<T> {
    */
   pluck<K extends keyof T>(key: K): EnhancedArray<T[K]> {
     return new EnhancedArray(
-      ...(this.map((item) => (item && 'object' === typeof item ? item[key] : undefined)).filter(
-        (val) => val !== undefined
-      ) as T[K][])
+      ...(this.map((item) => (item && typeof item === 'object' ? item[key] : undefined)).filter(
+        (val) => val !== undefined,
+      ) as T[K][]),
     )
   }
 
@@ -129,7 +141,7 @@ export class EnhancedArray<T> extends Array<T> {
     for (let i = 0; i < this.length; i++) {
       const item = this[i]
       const groupKey =
-        'function' === typeof key ? String(key(item, i)) : String(item && 'object' === typeof item ? item[key] : item)
+        typeof key === 'function' ? String(key(item, i)) : String(item && typeof item === 'object' ? item[key] : item)
 
       if (!groups[groupKey]) {
         groups[groupKey] = new EnhancedArray<T>()
@@ -154,13 +166,13 @@ export class EnhancedArray<T> extends Array<T> {
     const seen = new Set()
     return new EnhancedArray(
       ...this.filter((item) => {
-        const value = item && 'object' === typeof item ? item[key] : item
+        const value = item && typeof item === 'object' ? item[key] : item
         if (seen.has(value)) {
           return false
         }
         seen.add(value)
         return true
-      })
+      }),
     )
   }
 
@@ -190,7 +202,7 @@ export class EnhancedArray<T> extends Array<T> {
       const result: unknown[] = []
 
       for (const item of arr) {
-        if (Array.isArray(item) && 0 < currentDepth) {
+        if (Array.isArray(item) && currentDepth > 0) {
           result.push(...flatten(item, currentDepth - 1))
         } else {
           result.push(item)
@@ -210,17 +222,17 @@ export class EnhancedArray<T> extends Array<T> {
    * @returns {EnhancedArray<T>} A new rotated collection
    */
   rotate(positions: number = 1): EnhancedArray<T> {
-    if (0 === this.length) {
+    if (this.length === 0) {
       return new EnhancedArray<T>()
     }
 
     const count = this.length
     positions = positions % count
 
-    if (0 === positions) {
+    if (positions === 0) {
       return this.collect()
     }
-    if (0 > positions) {
+    if (positions < 0) {
       positions = count + positions
     }
 
@@ -240,7 +252,7 @@ export class EnhancedArray<T> extends Array<T> {
     for (let i = 0; i < this.length; i++) {
       const item = this[i]
 
-      if (0 < currentChunk.length && !predicate(item, i)) {
+      if (currentChunk.length > 0 && !predicate(item, i)) {
         chunks.push(currentChunk)
         currentChunk = new EnhancedArray<T>()
       }
@@ -248,7 +260,7 @@ export class EnhancedArray<T> extends Array<T> {
       currentChunk.push(item)
     }
 
-    if (0 < currentChunk.length) {
+    if (currentChunk.length > 0) {
       chunks.push(currentChunk)
     }
 
@@ -261,7 +273,7 @@ export class EnhancedArray<T> extends Array<T> {
    * @returns {EnhancedArray<EnhancedArray<unknown>>} A new transposed collection
    */
   transpose(): EnhancedArray<EnhancedArray<unknown>> {
-    if (0 === this.length) {
+    if (this.length === 0) {
       return new EnhancedArray()
     }
 
@@ -275,8 +287,8 @@ export class EnhancedArray<T> extends Array<T> {
           if (Array.isArray(row)) {
             return row[i] ?? null
           }
-          return 0 === i ? row : null
-        })
+          return i === 0 ? row : null
+        }),
       )
 
       result.push(column)
@@ -293,7 +305,7 @@ export class EnhancedArray<T> extends Array<T> {
    * @returns {boolean} True if sorted, false otherwise
    */
   isSorted(compareFn?: (a: T, b: T) => number): boolean {
-    if (1 >= this.length) {
+    if (this.length <= 1) {
       return true
     }
 
@@ -302,7 +314,7 @@ export class EnhancedArray<T> extends Array<T> {
       const current = this[i]
 
       if (compareFn) {
-        if (0 < compareFn(prev, current)) {
+        if (compareFn(prev, current) > 0) {
           return false
         }
       } else {
@@ -325,7 +337,7 @@ export class EnhancedArray<T> extends Array<T> {
     if (key) {
       const seen = new Set()
       for (const item of this) {
-        const value = item && 'object' === typeof item ? item[key] : item
+        const value = item && typeof item === 'object' ? item[key] : item
         if (seen.has(value)) {
           return true
         }
@@ -345,7 +357,7 @@ export class EnhancedArray<T> extends Array<T> {
    * @returns {number | null} The median value or null if collection is empty
    */
   median(accessor?: Callback<T, number>): number | null {
-    if (0 === this.length) {
+    if (this.length === 0) {
       return null
     }
 
@@ -353,7 +365,7 @@ export class EnhancedArray<T> extends Array<T> {
     const sorted = [...values].sort((a, b) => (a as number) - (b as number))
     const count = sorted.length
 
-    if (0 === count % 2) {
+    if (count % 2 === 0) {
       return ((sorted[count / 2 - 1] as number) + (sorted[count / 2] as number)) / 2
     }
 
@@ -367,7 +379,7 @@ export class EnhancedArray<T> extends Array<T> {
    * @returns {EnhancedArray<unknown>} A collection of mode values
    */
   mode(accessor?: Callback<T, unknown>): EnhancedArray<unknown> {
-    if (0 === this.length) {
+    if (this.length === 0) {
       return new EnhancedArray()
     }
 
@@ -384,7 +396,7 @@ export class EnhancedArray<T> extends Array<T> {
    * @returns {number} The standard deviation
    */
   standardDeviation(accessor?: Callback<T, number>): number {
-    if (0 === this.length) {
+    if (this.length === 0) {
       return 0
     }
 
@@ -392,7 +404,7 @@ export class EnhancedArray<T> extends Array<T> {
     const mean = (values as number[]).reduce((sum, val) => (sum as number) + (val as number), 0) / values.length
     const sumSquaredDifferences = (values as number[]).reduce(
       (sum, val) => (sum as number) + Math.pow((val as number) - mean, 2),
-      0
+      0,
     )
 
     return Math.sqrt((sumSquaredDifferences as number) / values.length)
@@ -406,7 +418,7 @@ export class EnhancedArray<T> extends Array<T> {
    * @returns {number | null} The percentile value or null if collection is empty
    */
   percentile(percentile: number, accessor?: Callback<T, number>): number | null {
-    if (0 === this.length) {
+    if (this.length === 0) {
       return null
     }
 
@@ -502,7 +514,7 @@ export class EnhancedArray<T> extends Array<T> {
    * @returns {EnhancedArray<EnhancedArray<T>>} A collection of window collections
    */
   sliding(size: number = 2, step: number = 1): EnhancedArray<EnhancedArray<T>> {
-    if (0 >= size || 0 >= step) {
+    if (size <= 0 || step <= 0) {
       return new EnhancedArray()
     }
 
@@ -534,7 +546,7 @@ export class EnhancedArray<T> extends Array<T> {
    */
   before(item: T): T | undefined {
     const index = this.indexOf(item)
-    return 0 < index ? this[index - 1] : undefined
+    return index > 0 ? this[index - 1] : undefined
   }
 
   /**
@@ -545,7 +557,7 @@ export class EnhancedArray<T> extends Array<T> {
    */
   after(item: T): T | undefined {
     const index = this.indexOf(item)
-    return 0 <= index && index < this.length - 1 ? this[index + 1] : undefined
+    return index >= 0 && index < this.length - 1 ? this[index + 1] : undefined
   }
 
   // Transformation macros
@@ -556,7 +568,7 @@ export class EnhancedArray<T> extends Array<T> {
    * @returns {EnhancedArray<EnhancedArray<T>>} A collection of chunked collections
    */
   chunkBy<K extends keyof T>(key: K | Callback<T, unknown>): EnhancedArray<EnhancedArray<T>> {
-    if (0 === this.length) {
+    if (this.length === 0) {
       return new EnhancedArray()
     }
 
@@ -567,9 +579,9 @@ export class EnhancedArray<T> extends Array<T> {
     for (let i = 0; i < this.length; i++) {
       const item = this[i]
       const currentValue =
-        'function' === typeof key ? key(item, i) : item && 'object' === typeof item ? item[key] : item
+        typeof key === 'function' ? key(item, i) : item && typeof item === 'object' ? item[key] : item
 
-      if (0 === i || currentValue === lastValue) {
+      if (i === 0 || currentValue === lastValue) {
         currentChunk.push(item)
       } else {
         chunks.push(currentChunk)
@@ -579,7 +591,7 @@ export class EnhancedArray<T> extends Array<T> {
       lastValue = currentValue
     }
 
-    if (0 < currentChunk.length) {
+    if (currentChunk.length > 0) {
       chunks.push(currentChunk)
     }
 
@@ -598,7 +610,7 @@ export class EnhancedArray<T> extends Array<T> {
 
     for (let i = 0; i < this.length; i++) {
       const mapped = callback(this[i], i)
-      if (null !== mapped && mapped !== undefined) {
+      if (mapped !== null && mapped !== undefined) {
         result.push(mapped)
       }
     }
@@ -615,7 +627,7 @@ export class EnhancedArray<T> extends Array<T> {
   extract<K extends keyof T>(keys: K[]): EnhancedArray<Partial<T>> {
     return new EnhancedArray(
       ...this.map((item) => {
-        if (!item || 'object' !== typeof item) {
+        if (!item || typeof item !== 'object') {
           return {} as Partial<T>
         }
 
@@ -626,7 +638,7 @@ export class EnhancedArray<T> extends Array<T> {
           }
         }
         return extracted
-      })
+      }),
     )
   }
 
@@ -638,7 +650,7 @@ export class EnhancedArray<T> extends Array<T> {
    * @returns {T} The first item or the pushed item
    */
   firstOrPush(item: T): T {
-    if (0 === this.length) {
+    if (this.length === 0) {
       this.push(item)
       return item
     }
@@ -666,7 +678,7 @@ export class EnhancedArray<T> extends Array<T> {
    * @returns {T | undefined} A random item or undefined if collection is empty
    */
   weightedRandom(weights?: number[]): T | undefined {
-    if (0 === this.length) {
+    if (this.length === 0) {
       return undefined
     }
 
@@ -698,7 +710,7 @@ export class EnhancedArray<T> extends Array<T> {
    */
   paginate(
     perPage: number,
-    page: number = 1
+    page: number = 1,
   ): {
     data: EnhancedArray<T>
     total: number
@@ -735,7 +747,7 @@ export class EnhancedArray<T> extends Array<T> {
       if (Array.isArray(item)) {
         return new EnhancedArray(...item.map(convert))
       }
-      if (item && 'object' === typeof item && item.constructor === Object) {
+      if (item && typeof item === 'object' && item.constructor === Object) {
         const converted: Record<string, unknown> = {}
         for (const [key, value] of Object.entries(item)) {
           converted[key] = convert(value)
@@ -747,6 +759,18 @@ export class EnhancedArray<T> extends Array<T> {
 
     return new EnhancedArray(...this.map(convert))
   }
+}
+
+/**
+ * Build an empty collection of a given length, for the native methods of arrays (see `Symbol.species` above).
+ *
+ * @param {number} length The length of the collection
+ * @returns {EnhancedArray<unknown>} The collection
+ */
+function withLength(length: number): EnhancedArray<unknown> {
+  const collection = new EnhancedArray<unknown>()
+  collection.length = length
+  return collection
 }
 
 // Utility functions for objects and maps
@@ -794,8 +818,8 @@ export class EnhancedMap<K, V> extends Map<K, V> {
   pluck<P extends keyof V>(key: P): EnhancedArray<V[P]> {
     return new EnhancedArray(
       ...(Array.from(this.values())
-        .map((value) => (value && 'object' === typeof value ? value[key] : undefined))
-        .filter((val) => val !== undefined) as V[P][])
+        .map((value) => (value && typeof value === 'object' ? value[key] : undefined))
+        .filter((val) => val !== undefined) as V[P][]),
     )
   }
 

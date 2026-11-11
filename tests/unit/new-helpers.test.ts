@@ -178,7 +178,7 @@ describe('New Helpers Integration', () => {
         {
           email: z.string().email(),
           age: z.number().min(18),
-        }
+        },
       )
 
       expect(v.passes()).toBe(true)
@@ -191,7 +191,7 @@ describe('New Helpers Integration', () => {
         {
           email: z.string().email(),
           age: z.number().min(18),
-        }
+        },
       )
 
       expect(v.firstError('email')).toBeDefined()

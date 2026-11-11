@@ -390,3 +390,19 @@ describe('php_array()', () => {
     expect(arr.product()).toBe(24)
   })
 })
+
+describe('php_array() (sorting methods)', () => {
+  it('rsort() sorts in descending order', () => {
+    expect([...php_array([1, 3, 2]).rsort()]).toEqual([3, 2, 1])
+  })
+
+  it('usort() sorts with the given comparison function', () => {
+    expect([...php_array([1, 3, 2]).usort((a, b) => b - a)]).toEqual([3, 2, 1])
+  })
+
+  it('shuffle() keeps the same items', () => {
+    const shuffled = [...php_array([1, 2, 3, 4]).shuffle()]
+    expect(shuffled).toHaveLength(4)
+    expect([...shuffled].sort()).toEqual([1, 2, 3, 4])
+  })
+})

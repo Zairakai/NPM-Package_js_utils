@@ -14,7 +14,7 @@ import { EnhancedArray } from './collections.js'
  * @returns {T[][]} An array of chunks
  */
 export const array_chunk = <T>(array: T[], size: number): T[][] => {
-  if (0 >= size) {
+  if (size <= 0) {
     return []
   }
   const chunks: T[][] = []
@@ -101,7 +101,7 @@ export const array_reverse = <T>(array: T[], _preserveKeys: boolean = false): T[
  * @returns {T[]} The sliced portion of the array
  */
 export const array_slice = <T>(array: T[], offset: number, length?: number): T[] => {
-  const start = 0 > offset ? Math.max(0, array.length + offset) : offset
+  const start = offset < 0 ? Math.max(0, array.length + offset) : offset
   const end = length !== undefined ? start + length : undefined
   return array.slice(start, end)
 }
@@ -141,7 +141,7 @@ export const array_keys = <T>(array: T[]): number[] => {
  */
 export const array_search = <T>(needle: T, haystack: T[]): number | false => {
   const index = haystack.indexOf(needle)
-  return -1 !== index ? index : false
+  return index !== -1 ? index : false
 }
 
 /**
@@ -152,7 +152,7 @@ export const array_search = <T>(needle: T, haystack: T[]): number | false => {
  * @returns {boolean} True if the key exists
  */
 export const array_key_exists = <T>(key: number, array: T[]): boolean => {
-  return 0 <= key && key < array.length
+  return key >= 0 && key < array.length
 }
 
 /**
@@ -227,13 +227,13 @@ export const array_product = (array: number[]): number => {
  * @returns {T | T[] | undefined} The random entry or entries
  */
 export const array_rand = <T>(array: T[], num: number = 1): T | T[] | undefined => {
-  if (0 === array.length) {
-    return 1 === num ? undefined : []
+  if (array.length === 0) {
+    return num === 1 ? undefined : []
   }
 
   const shuffled = [...array].sort(() => Math.random() - 0.5)
 
-  if (1 === num) {
+  if (num === 1) {
     return shuffled[0]
   }
 
@@ -277,7 +277,7 @@ export const array_count_values = <T extends string | number>(array: T[]): Recor
  * @returns {T[]} The intersection of the arrays
  */
 export const array_intersect = <T>(...arrays: T[][]): T[] => {
-  if (0 === arrays.length) {
+  if (arrays.length === 0) {
     return []
   }
 
@@ -306,7 +306,7 @@ export const array_diff = <T>(array1: T[], ...arrays: T[][]): T[] => {
  */
 export const array_column = <T, K extends keyof T>(array: T[], column: K): T[K][] => {
   return array
-    .map((item) => (item && 'object' === typeof item ? item[column] : undefined))
+    .map((item) => (item && typeof item === 'object' ? item[column] : undefined))
     .filter((value) => value !== undefined) as T[K][]
 }
 
@@ -374,7 +374,7 @@ export const uksort = <T>(array: T[], compareFunction: (a: number, b: number) =>
  */
 export const shuffle = <T>(array: T[]): T[] => {
   const result = [...array]
-  for (let i = result.length - 1; 0 < i; i--) {
+  for (let i = result.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
     ;[result[i], result[j]] = [result[j], result[i]]
   }
@@ -393,11 +393,11 @@ export const shuffle = <T>(array: T[]): T[] => {
 export const range = (start: number, end: number, step: number = 1): number[] => {
   const result: number[] = []
 
-  if (0 < step) {
+  if (step > 0) {
     for (let i = start; i <= end; i += step) {
       result.push(i)
     }
-  } else if (0 > step) {
+  } else if (step < 0) {
     for (let i = start; i >= end; i += step) {
       result.push(i)
     }

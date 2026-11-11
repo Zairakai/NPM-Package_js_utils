@@ -37,6 +37,16 @@ describe('capitalize()', () => {
 })
 
 describe('slugify()', () => {
+  it('removes the separators at both ends', () => {
+    expect(slugify('Hello World ?')).toBe('hello-world')
+    expect(slugify('? Hello World')).toBe('hello-world')
+    expect(slugify('--Hello--World--')).toBe('hello-world')
+  })
+
+  it('is empty when nothing is left but symbols', () => {
+    expect(slugify('?!')).toBe('')
+  })
+
   it('converts string to slug', () => {
     expect(slugify('Hello World')).toBe('hello-world')
     expect(slugify('  Multiple   Spaces  ')).toBe('multiple-spaces')

@@ -11,7 +11,7 @@ import { GenericRecord } from './types.js'
  * @returns {value is GenericRecord} True if the value is a plain object
  */
 export function isRecord(value: unknown): value is GenericRecord {
-  return null !== value && 'object' === typeof value && !Array.isArray(value)
+  return value !== null && typeof value === 'object' && !Array.isArray(value)
 }
 
 /**
@@ -36,7 +36,7 @@ export const tap = <T>(value: T, callback: (value: T) => void): T => {
  * @returns {R | undefined} The result of the executed callback or undefined
  */
 export const when = <R>(condition: unknown, onTrue: () => R, onFalse?: () => R): R | undefined => {
-  const shouldExecute = 'function' === typeof condition ? (condition as () => boolean)() : Boolean(condition)
+  const shouldExecute = typeof condition === 'function' ? (condition as () => boolean)() : Boolean(condition)
 
   if (shouldExecute) {
     return onTrue()
@@ -54,7 +54,7 @@ export const when = <R>(condition: unknown, onTrue: () => R, onFalse?: () => R):
  * @returns {T} The resolved value
  */
 export const value = <T>(val: T | (() => T)): T => {
-  return 'function' === typeof val ? (val as () => T)() : val
+  return typeof val === 'function' ? (val as () => T)() : val
 }
 
 /**
@@ -149,7 +149,7 @@ export const optional = <T>(value: T): T | null => {
 export const retry = async <T>(
   times: number,
   callback: (attempt: number) => Promise<T> | T,
-  sleepMilliseconds = 0
+  sleepMilliseconds = 0,
 ): Promise<T> => {
   let lastError: Error | undefined
 
@@ -158,7 +158,7 @@ export const retry = async <T>(
       return await callback(attempt)
     } catch (error) {
       lastError = error instanceof Error ? error : new Error(String(error))
-      if (attempt < times && 0 < sleepMilliseconds) {
+      if (attempt < times && sleepMilliseconds > 0) {
         await new Promise((resolve) => setTimeout(resolve, sleepMilliseconds))
       }
     }
@@ -175,8 +175,8 @@ export const retry = async <T>(
  * @throws {Error} If the condition is met
  */
 export const throw_if = (condition: unknown, exception: Error | string): void => {
-  if ('function' === typeof condition ? (condition as () => boolean)() : Boolean(condition)) {
-    throw 'string' === typeof exception ? new Error(exception) : exception
+  if (typeof condition === 'function' ? (condition as () => boolean)() : Boolean(condition)) {
+    throw typeof exception === 'string' ? new Error(exception) : exception
   }
 }
 
@@ -188,7 +188,7 @@ export const throw_if = (condition: unknown, exception: Error | string): void =>
  * @throws {Error} If the condition is not met
  */
 export const throw_unless = (condition: unknown, exception: Error | string): void => {
-  if (!('function' === typeof condition ? (condition as () => boolean)() : Boolean(condition))) {
-    throw 'string' === typeof exception ? new Error(exception) : exception
+  if (!(typeof condition === 'function' ? (condition as () => boolean)() : Boolean(condition))) {
+    throw typeof exception === 'string' ? new Error(exception) : exception
   }
 }

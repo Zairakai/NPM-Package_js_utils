@@ -22,8 +22,8 @@ describe('isEqual', () => {
         new Map([
           ['a', 1],
           ['b', 2],
-        ])
-      )
+        ]),
+      ),
     ).toBe(false)
   })
 
