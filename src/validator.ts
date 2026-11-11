@@ -63,7 +63,7 @@ export class ValidationInstance<T extends z.ZodTypeAny> {
 
   constructor(
     private data: unknown,
-    private schema: T
+    private schema: T,
   ) {
     this.result = this.schema.safeParse(this.data) as ReturnType<T['safeParse']>
   }

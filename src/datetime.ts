@@ -65,7 +65,7 @@ export const isBetweenDates = (
   start: ConfigType,
   end: ConfigType,
   unit: dayjsModule.OpUnitType = 'day',
-  inclusivity: '()' | '[]' | '[)' | '(]' = '[]'
+  inclusivity: '()' | '[]' | '[)' | '(]' = '[]',
 ): boolean => {
   return dayjs(date).isBetween(dayjs(start), dayjs(end), unit, inclusivity)
 }

@@ -196,11 +196,11 @@ export class Objectable<T extends Record<string, unknown>> {
         const srcVal = source[key]
         const tgtVal = target[key]
         if (
-          null !== srcVal &&
-          'object' === typeof srcVal &&
+          srcVal !== null &&
+          typeof srcVal === 'object' &&
           !Array.isArray(srcVal) &&
-          null !== tgtVal &&
-          'object' === typeof tgtVal &&
+          tgtVal !== null &&
+          typeof tgtVal === 'object' &&
           !Array.isArray(tgtVal)
         ) {
           result[key] = merge(tgtVal as Record<string, unknown>, srcVal as Record<string, unknown>)
@@ -269,7 +269,7 @@ export class Objectable<T extends Record<string, unknown>> {
    * @returns {this} The Objectable instance
    */
   when(condition: boolean | (() => boolean), callback: (obj: this) => void): this {
-    const shouldExecute = 'function' === typeof condition ? (condition as () => boolean)() : condition
+    const shouldExecute = typeof condition === 'function' ? (condition as () => boolean)() : condition
     if (shouldExecute) {
       callback(this)
     }

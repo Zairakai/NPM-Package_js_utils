@@ -123,7 +123,7 @@ export const validateSchema = <T>(schema: z.ZodSchema<T>, data: unknown): T => {
  */
 export const safeValidateSchema = <T>(
   schema: z.ZodSchema<T>,
-  data: unknown
+  data: unknown,
 ): { success: true; data: T } | { success: false; errors: string[] } => {
   const result = schema.safeParse(data)
 

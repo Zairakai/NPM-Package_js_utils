@@ -44,12 +44,12 @@ describe('Numberable uncovered branches', () => {
     expect(
       num(10)
         .when(true, (n) => n.add(5))
-        .get()
+        .get(),
     ).toBe(15)
     expect(
       num(10)
         .when(false, (n) => n.add(5))
-        .get()
+        .get(),
     ).toBe(10)
   })
 
@@ -58,9 +58,9 @@ describe('Numberable uncovered branches', () => {
       num(10)
         .when(
           () => true,
-          (n) => n.mul(2)
+          (n) => n.mul(2),
         )
-        .get()
+        .get(),
     ).toBe(20)
   })
 

@@ -97,7 +97,7 @@ export class Stringable {
    */
   limit(size: number, end = '…'): this {
     this.value = formatters.strLimit(this.value, size)
-    if (this.value.endsWith('…') && '…' !== end) {
+    if (this.value.endsWith('…') && end !== '…') {
       this.value = this.value.slice(0, -1) + end
     }
     return this
@@ -167,7 +167,7 @@ export class Stringable {
    * @returns {this} The Stringable instance
    */
   replaceAll(search: string | RegExp, replace: string): this {
-    if ('string' === typeof search) {
+    if (typeof search === 'string') {
       this.value = this.value.split(search).join(replace)
     } else {
       const flags = search.flags.includes('g') ? search.flags : `${search.flags}g`
@@ -312,7 +312,7 @@ export class Stringable {
    * @returns {this} The Stringable instance
    */
   when(condition: boolean | (() => boolean), callback: (str: this) => void): this {
-    const shouldExecute = 'function' === typeof condition ? condition() : condition
+    const shouldExecute = typeof condition === 'function' ? condition() : condition
     if (shouldExecute) {
       callback(this)
     }
@@ -411,7 +411,7 @@ export const Str = {
    */
   limit: (value: string, size: number, end = '…') => {
     const result = formatters.strLimit(value, size)
-    return result.endsWith('…') && '…' !== end ? result.slice(0, -1) + end : result
+    return result.endsWith('…') && end !== '…' ? result.slice(0, -1) + end : result
   },
 
   /**
