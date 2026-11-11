@@ -1,10 +1,10 @@
 /**
  * Knip configuration
- * @see https://github.com/webpro/knip
+ * @see https://knip.dev/reference/configuration
  */
 export default {
   project: ['src/**/*.ts'],
+  // The tools are run by the Makefile and the npm scripts, which Knip does not read
   ignoreBinaries: ['eslint', 'prettier', 'markdownlint', 'make'],
-  // @typescript-eslint/parser is a transitive dep via @zairakai/js-dev-tools — used directly in eslint.config.js
-  ignoreDependencies: ['sort-package-json', '@typescript-eslint/parser'],
+  ignoreDependencies: ['sort-package-json'],
 }
