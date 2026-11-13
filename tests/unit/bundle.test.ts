@@ -31,13 +31,17 @@ describe('bundle for the browser', () => {
   })
 
   it('does not carry dayjs or zod for a string helper', async () => {
-    const output = await bundle("import { strLimit } from './src/index'; console.log(strLimit('hello world', 5))")
+    const output = await bundle(
+      "import { strLimit } from './src/index'; console.log(strLimit('hello world', 5))",
+    )
     expect(output).not.toMatch(/dayjs/i)
     expect(output).not.toMatch(/ZodError/)
   })
 
   it('carries dayjs only when a date helper is imported', async () => {
-    const output = await bundle("import { today } from './src/index'; console.log(today())")
+    const output = await bundle(
+      "import { today } from './src/index'; console.log(today())",
+    )
     expect(output).toMatch(/dayjs/i)
     expect(output).not.toMatch(/ZodError/)
   })

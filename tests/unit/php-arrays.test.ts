@@ -47,7 +47,9 @@ describe('array_chunk()', () => {
 
 describe('array_filter()', () => {
   it('filters falsy values without callback', () => {
-    expect(array_filter([0, 1, false, 2, null, 3, undefined, ''])).toEqual([1, 2, 3])
+    expect(array_filter([0, 1, false, 2, null, 3, undefined, ''])).toEqual([
+      1, 2, 3,
+    ])
   })
 
   it('filters with callback', () => {
@@ -63,7 +65,9 @@ describe('array_map()', () => {
 
 describe('array_reduce()', () => {
   it('reduces array to single value', () => {
-    expect(array_reduce([1, 2, 3, 4], (carry, item) => carry + item, 0)).toBe(10)
+    expect(array_reduce([1, 2, 3, 4], (carry, item) => carry + item, 0)).toBe(
+      10,
+    )
   })
 })
 

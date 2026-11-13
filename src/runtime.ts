@@ -1,4 +1,4 @@
-import { GenericRecord } from './types.js'
+import { type GenericRecord } from './types.js'
 
 /**
  * Runtime utility functions inspired by Laravel
@@ -35,8 +35,15 @@ export const tap = <T>(value: T, callback: (value: T) => void): T => {
  * @param {() => R} [onFalse] The callback to execute if the condition is falsy
  * @returns {R | undefined} The result of the executed callback or undefined
  */
-export const when = <R>(condition: unknown, onTrue: () => R, onFalse?: () => R): R | undefined => {
-  const shouldExecute = typeof condition === 'function' ? (condition as () => boolean)() : Boolean(condition)
+export const when = <R>(
+  condition: unknown,
+  onTrue: () => R,
+  onFalse?: () => R,
+): R | undefined => {
+  const shouldExecute =
+    typeof condition === 'function'
+      ? (condition as () => boolean)()
+      : Boolean(condition)
 
   if (shouldExecute) {
     return onTrue()
@@ -65,7 +72,11 @@ export const value = <T>(val: T | (() => T)): T => {
  * @param {unknown} [defaultValue=null] The default value to return if the key is not found
  * @returns {unknown} The found value or the default value
  */
-export const data_get = (target: unknown, key: string | string[], defaultValue: unknown = null): unknown => {
+export const data_get = (
+  target: unknown,
+  key: string | string[],
+  defaultValue: unknown = null,
+): unknown => {
   if (!isRecord(target) && !Array.isArray(target)) {
     return defaultValue
   }
@@ -96,7 +107,11 @@ export const data_get = (target: unknown, key: string | string[], defaultValue: 
  * @param {unknown} value The value to set
  * @returns {T} The modified target
  */
-export const data_set = <T>(target: T, key: string | string[], value: unknown): T => {
+export const data_set = <T>(
+  target: T,
+  key: string | string[],
+  value: unknown,
+): T => {
   if (!isRecord(target) && !Array.isArray(target)) {
     return target
   }
@@ -105,7 +120,7 @@ export const data_set = <T>(target: T, key: string | string[], value: unknown): 
   let current: unknown = target
 
   for (let i = 0; i < parts.length - 1; i++) {
-    const part = parts[i]
+    const part = parts[i] as string
 
     if (!isRecord(current)) {
       break
@@ -121,7 +136,7 @@ export const data_set = <T>(target: T, key: string | string[], value: unknown): 
   }
 
   if (isRecord(current)) {
-    ;(current as GenericRecord)[parts[parts.length - 1]] = value
+    ;(current as GenericRecord)[parts[parts.length - 1] as string] = value
   }
 
   return target
@@ -174,8 +189,15 @@ export const retry = async <T>(
  * @param {Error | string} exception The error to throw or the error message
  * @throws {Error} If the condition is met
  */
-export const throw_if = (condition: unknown, exception: Error | string): void => {
-  if (typeof condition === 'function' ? (condition as () => boolean)() : Boolean(condition)) {
+export const throw_if = (
+  condition: unknown,
+  exception: Error | string,
+): void => {
+  if (
+    typeof condition === 'function'
+      ? (condition as () => boolean)()
+      : Boolean(condition)
+  ) {
     throw typeof exception === 'string' ? new Error(exception) : exception
   }
 }
@@ -187,8 +209,15 @@ export const throw_if = (condition: unknown, exception: Error | string): void =>
  * @param {Error | string} exception The error to throw or the error message
  * @throws {Error} If the condition is not met
  */
-export const throw_unless = (condition: unknown, exception: Error | string): void => {
-  if (!(typeof condition === 'function' ? (condition as () => boolean)() : Boolean(condition))) {
+export const throw_unless = (
+  condition: unknown,
+  exception: Error | string,
+): void => {
+  if (
+    !(typeof condition === 'function'
+      ? (condition as () => boolean)()
+      : Boolean(condition))
+  ) {
     throw typeof exception === 'string' ? new Error(exception) : exception
   }
 }

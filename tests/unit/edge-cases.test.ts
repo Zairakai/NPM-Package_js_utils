@@ -1,5 +1,10 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { arrayCollapse, arrayGroupBy, arrayPluck, arrayUnique } from '../../src/arrays'
+import {
+  arrayCollapse,
+  arrayGroupBy,
+  arrayPluck,
+  arrayUnique,
+} from '../../src/arrays'
 import { EnhancedMap, collect } from '../../src/collections'
 import { isEqual } from '../../src/equals'
 import { strContainsAny, strStart, strWordCount } from '../../src/formatters'
@@ -14,7 +19,9 @@ describe('items that are not objects, when a key is given', () => {
   const mixed = [{ id: 1 }, 7, null, { id: 1 }] as unknown as Row[]
 
   it('arrayCollapse() keeps an item that is not an array', () => {
-    expect(arrayCollapse([[1, 2], 3, [4]] as unknown as number[][])).toEqual([1, 2, 3, 4])
+    expect(arrayCollapse([[1, 2], 3, [4]] as unknown as number[][])).toEqual([
+      1, 2, 3, 4,
+    ])
   })
 
   it('arrayPluck() skips them', () => {
@@ -22,7 +29,10 @@ describe('items that are not objects, when a key is given', () => {
   })
 
   it('arrayGroupBy() groups a primitive by its own value', () => {
-    expect(arrayGroupBy([1, 1, 2] as unknown as Row[], 'id')).toEqual({ '1': [1, 1], '2': [2] })
+    expect(arrayGroupBy([1, 1, 2] as unknown as Row[], 'id')).toEqual({
+      '1': [1, 1],
+      '2': [2],
+    })
   })
 
   it('arrayUnique() compares a primitive by its own value', () => {
@@ -39,15 +49,21 @@ describe('items that are not objects, when a key is given', () => {
   })
 
   it('EnhancedArray.unique() compares a primitive by its own value', () => {
-    expect([...collect([1, 1, 2] as unknown as Row[]).unique('id')]).toEqual([1, 2])
+    expect([...collect([1, 1, 2] as unknown as Row[]).unique('id')]).toEqual([
+      1, 2,
+    ])
   })
 
   it('EnhancedArray.hasDuplicates() compares a primitive by its own value', () => {
-    expect(collect([1, 2, 1] as unknown as Row[]).hasDuplicates('id')).toBe(true)
+    expect(collect([1, 2, 1] as unknown as Row[]).hasDuplicates('id')).toBe(
+      true,
+    )
   })
 
   it('EnhancedArray.chunkBy() groups a primitive by its own value', () => {
-    expect(collect(['a', 'a', 'b'] as unknown as Row[]).chunkBy('id')).toHaveLength(2)
+    expect(
+      collect(['a', 'a', 'b'] as unknown as Row[]).chunkBy('id'),
+    ).toHaveLength(2)
   })
 
   it('EnhancedMap.pluck() skips them', () => {
@@ -59,13 +75,17 @@ describe('items that are not objects, when a key is given', () => {
   })
 
   it('array_column() skips them', () => {
-    expect(array_column(mixed as unknown as Record<string, unknown>[], 'id')).toEqual([1, 1])
+    expect(
+      array_column(mixed as unknown as Record<string, unknown>[], 'id'),
+    ).toEqual([1, 1])
   })
 })
 
 describe('EnhancedArray.median() with an accessor', () => {
   it('reads the numbers through the accessor', () => {
-    expect(collect([{ n: 3 }, { n: 1 }, { n: 2 }]).median((row) => row.n)).toBe(2)
+    expect(collect([{ n: 3 }, { n: 1 }, { n: 2 }]).median((row) => row.n)).toBe(
+      2,
+    )
   })
 })
 
@@ -120,7 +140,9 @@ describe('num() and str() without a value', () => {
   })
 
   it('slug() makes a URL-friendly string', () => {
-    expect(str('Hello World, Ça va ?').slug().toString()).toBe('hello-world-ca-va')
+    expect(str('Hello World, Ça va ?').slug().toString()).toBe(
+      'hello-world-ca-va',
+    )
   })
 })
 
@@ -149,6 +171,8 @@ describe('runtime', () => {
   })
 
   it('retry() fails with a message when it is never called', async () => {
-    await expect(retry(0, () => 1)).rejects.toThrow('Retry failed after 0 attempts')
+    await expect(retry(0, () => 1)).rejects.toThrow(
+      'Retry failed after 0 attempts',
+    )
   })
 })

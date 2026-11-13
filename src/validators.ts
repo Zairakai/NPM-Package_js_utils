@@ -33,7 +33,8 @@ export const isNull = (value: unknown): value is null => value === null
  * @param {unknown} value The value to check
  * @returns {value is undefined} True if the value is strictly undefined
  */
-export const isUndefined = (value: unknown): value is undefined => undefined === value
+export const isUndefined = (value: unknown): value is undefined =>
+  undefined === value
 
 /**
  * Check if value is neither null nor undefined
@@ -41,7 +42,8 @@ export const isUndefined = (value: unknown): value is undefined => undefined ===
  * @param {unknown} value The value to check
  * @returns {value is NonNullable<unknown>} True if the value is set
  */
-export const isSet = (value: unknown): value is NonNullable<unknown> => undefined !== value && value !== null
+export const isSet = (value: unknown): value is NonNullable<unknown> =>
+  undefined !== value && value !== null
 
 /**
  * Check if value is an array
@@ -49,7 +51,8 @@ export const isSet = (value: unknown): value is NonNullable<unknown> => undefine
  * @param {unknown} value The value to check
  * @returns {value is unknown[]} True if the value is an array
  */
-export const isArray = (value: unknown): value is unknown[] => Array.isArray(value)
+export const isArray = (value: unknown): value is unknown[] =>
+  Array.isArray(value)
 
 /**
  * Check if value is a plain object (Record)
@@ -66,7 +69,8 @@ export const isObject = (value: unknown): value is Record<string, unknown> =>
  * @param {unknown} value The value to check
  * @returns {value is string} True if the value is a string
  */
-export const isString = (value: unknown): value is string => typeof value === 'string'
+export const isString = (value: unknown): value is string =>
+  typeof value === 'string'
 
 /**
  * Check if value is a number and not NaN
@@ -74,7 +78,8 @@ export const isString = (value: unknown): value is string => typeof value === 's
  * @param {unknown} value The value to check
  * @returns {value is number} True if the value is a valid number
  */
-export const isNumber = (value: unknown): value is number => typeof value === 'number' && !isNaN(value)
+export const isNumber = (value: unknown): value is number =>
+  typeof value === 'number' && !isNaN(value)
 
 /**
  * Check if value is an integer
@@ -82,7 +87,8 @@ export const isNumber = (value: unknown): value is number => typeof value === 'n
  * @param {unknown} value The value to check
  * @returns {value is number} True if the value is an integer
  */
-export const isInteger = (value: unknown): value is number => Number.isInteger(value)
+export const isInteger = (value: unknown): value is number =>
+  Number.isInteger(value)
 
 /**
  * Check if value is a float
@@ -99,7 +105,8 @@ export const isFloat = (value: unknown): value is number =>
  * @param {unknown} value The value to check
  * @returns {value is boolean} True if the value is a boolean
  */
-export const isBoolean = (value: unknown): value is boolean => typeof value === 'boolean'
+export const isBoolean = (value: unknown): value is boolean =>
+  typeof value === 'boolean'
 
 /**
  * Check if value is a function
@@ -107,7 +114,8 @@ export const isBoolean = (value: unknown): value is boolean => typeof value === 
  * @param {unknown} value The value to check
  * @returns {value is Function} True if the value is a function
  */
-export const isFunction = (value: unknown): value is Function => typeof value === 'function'
+export const isFunction = (value: unknown): value is Function =>
+  typeof value === 'function'
 
 /**
  * Check if value is a valid Date object
@@ -115,7 +123,8 @@ export const isFunction = (value: unknown): value is Function => typeof value ==
  * @param {unknown} value The value to check
  * @returns {value is Date} True if the value is a valid Date object
  */
-export const isDate = (value: unknown): value is Date => value instanceof Date && !isNaN(value.getTime())
+export const isDate = (value: unknown): value is Date =>
+  value instanceof Date && !isNaN(value.getTime())
 
 /**
  * Check if value is numeric (number or numeric string)
@@ -329,7 +338,9 @@ export const isUuid = (value: unknown): value is string => {
   if (typeof value !== 'string') {
     return false
   }
-  return /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value)
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+    value,
+  )
 }
 
 /**

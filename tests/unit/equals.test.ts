@@ -78,6 +78,8 @@ describe('diff', () => {
   })
 
   it('recurses into nested objects', () => {
-    expect(diff({ a: { b: 1, c: 2 } }, { a: { b: 1, c: 99 } })).toEqual({ a: { c: 99 } })
+    expect(diff({ a: { b: 1, c: 2 } }, { a: { b: 1, c: 99 } })).toEqual({
+      a: { c: 99 },
+    })
   })
 })

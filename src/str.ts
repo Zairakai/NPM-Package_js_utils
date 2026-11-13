@@ -170,7 +170,9 @@ export class Stringable {
     if (typeof search === 'string') {
       this.value = this.value.split(search).join(replace)
     } else {
-      const flags = search.flags.includes('g') ? search.flags : `${search.flags}g`
+      const flags = search.flags.includes('g')
+        ? search.flags
+        : `${search.flags}g`
       this.value = this.value.replace(new RegExp(search.source, flags), replace)
     }
     return this
@@ -311,8 +313,12 @@ export class Stringable {
    * @param {(str: this) => void} callback The callback to execute
    * @returns {this} The Stringable instance
    */
-  when(condition: boolean | (() => boolean), callback: (str: this) => void): this {
-    const shouldExecute = typeof condition === 'function' ? condition() : condition
+  when(
+    condition: boolean | (() => boolean),
+    callback: (str: this) => void,
+  ): this {
+    const shouldExecute =
+      typeof condition === 'function' ? condition() : condition
     if (shouldExecute) {
       callback(this)
     }
@@ -411,7 +417,9 @@ export const Str = {
    */
   limit: (value: string, size: number, end = '…') => {
     const result = formatters.strLimit(value, size)
-    return result.endsWith('…') && end !== '…' ? result.slice(0, -1) + end : result
+    return result.endsWith('…') && end !== '…'
+      ? result.slice(0, -1) + end
+      : result
   },
 
   /**
@@ -421,7 +429,8 @@ export const Str = {
    * @returns {string} The random string
    */
   random: (length = 16): string => {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    const chars =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
     let result = ''
     for (let i = 0; i < length; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length))

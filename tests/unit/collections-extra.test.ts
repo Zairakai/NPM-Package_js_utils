@@ -1,7 +1,15 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { EnhancedArray, EnhancedMap, collect, collectMap, mapToObject, objectToMap } from '../../src/collections'
+import {
+  EnhancedArray,
+  EnhancedMap,
+  collect,
+  collectMap,
+  mapToObject,
+  objectToMap,
+} from '../../src/collections'
 
-const plain = (rows: Iterable<Iterable<unknown>>) => Array.from(rows, (row) => Array.from(row))
+const plain = (rows: Iterable<Iterable<unknown>>) =>
+  Array.from(rows, (row) => Array.from(row))
 
 describe('EnhancedArray (comparison)', () => {
   it('isEquivalent() compares with an array or another collection', () => {
@@ -105,7 +113,9 @@ describe('EnhancedArray.isSorted() and hasDuplicates()', () => {
   })
 
   it('hasDuplicates() looks at a key of the items', () => {
-    expect(collect([{ id: 1 }, { id: 2 }, { id: 1 }]).hasDuplicates('id')).toBe(true)
+    expect(collect([{ id: 1 }, { id: 2 }, { id: 1 }]).hasDuplicates('id')).toBe(
+      true,
+    )
     expect(collect([{ id: 1 }, { id: 2 }]).hasDuplicates('id')).toBe(false)
   })
 })
@@ -116,7 +126,11 @@ describe('EnhancedArray (statistics)', () => {
   })
 
   it('mode() accepts an accessor', () => {
-    const users = collect([{ role: 'admin' }, { role: 'user' }, { role: 'user' }])
+    const users = collect([
+      { role: 'admin' },
+      { role: 'user' },
+      { role: 'user' },
+    ])
     expect([...users.mode((u) => u.role)]).toEqual(['user'])
   })
 
@@ -130,9 +144,16 @@ describe('EnhancedArray (statistics)', () => {
 
   it('standardDeviation() accepts an accessor', () => {
     expect(
-      collect([{ n: 2 }, { n: 4 }, { n: 4 }, { n: 4 }, { n: 5 }, { n: 5 }, { n: 7 }, { n: 9 }]).standardDeviation(
-        (r) => r.n,
-      ),
+      collect([
+        { n: 2 },
+        { n: 4 },
+        { n: 4 },
+        { n: 4 },
+        { n: 5 },
+        { n: 5 },
+        { n: 7 },
+        { n: 9 },
+      ]).standardDeviation((r) => r.n),
     ).toBe(2)
   })
 
@@ -147,7 +168,9 @@ describe('EnhancedArray (statistics)', () => {
   })
 
   it('percentile() accepts an accessor', () => {
-    expect(collect([{ n: 10 }, { n: 20 }, { n: 30 }]).percentile(100, (r) => r.n)).toBe(30)
+    expect(
+      collect([{ n: 10 }, { n: 20 }, { n: 30 }]).percentile(100, (r) => r.n),
+    ).toBe(30)
   })
 
   it('percentile() is null for an empty collection', () => {
@@ -156,7 +179,9 @@ describe('EnhancedArray (statistics)', () => {
 
   it('frequencies() counts the items, or the values of an accessor', () => {
     expect(collect(['a', 'b', 'a']).frequencies()).toEqual({ a: 2, b: 1 })
-    expect(collect([{ t: 'x' }, { t: 'x' }, { t: 'y' }]).frequencies((r) => r.t)).toEqual({ x: 2, y: 1 })
+    expect(
+      collect([{ t: 'x' }, { t: 'x' }, { t: 'y' }]).frequencies((r) => r.t),
+    ).toEqual({ x: 2, y: 1 })
   })
 })
 
@@ -171,7 +196,13 @@ describe('EnhancedArray (combinations)', () => {
   })
 
   it('interleave() alternates the items and keeps the rest of the longer ones', () => {
-    expect([...collect([1, 2, 3]).interleave(['a', 'b'])]).toEqual([1, 'a', 2, 'b', 3])
+    expect([...collect([1, 2, 3]).interleave(['a', 'b'])]).toEqual([
+      1,
+      'a',
+      2,
+      'b',
+      3,
+    ])
   })
 
   it('sliding() returns the windows', () => {
@@ -220,7 +251,9 @@ describe('EnhancedArray (transformations)', () => {
   })
 
   it('chunkBy() accepts a callback', () => {
-    expect(plain(collect(['a', 'b', 'cc', 'dd', 'e', 'f']).chunkBy((s) => s.length))).toEqual([
+    expect(
+      plain(collect(['a', 'b', 'cc', 'dd', 'e', 'f']).chunkBy((s) => s.length)),
+    ).toEqual([
       ['a', 'b'],
       ['cc', 'dd'],
       ['e', 'f'],
@@ -232,17 +265,27 @@ describe('EnhancedArray (transformations)', () => {
   })
 
   it('filterMap() maps and drops null and undefined, but keeps 0', () => {
-    expect([...collect([1, 2, 3, 4]).filterMap((n) => (n % 2 === 0 ? n * 10 : null))]).toEqual([20, 40])
-    expect([...collect([1, 2, 3]).filterMap((n) => (n === 2 ? undefined : n - 1))]).toEqual([0, 2])
+    expect([
+      ...collect([1, 2, 3, 4]).filterMap((n) => (n % 2 === 0 ? n * 10 : null)),
+    ]).toEqual([20, 40])
+    expect([
+      ...collect([1, 2, 3]).filterMap((n) => (n === 2 ? undefined : n - 1)),
+    ]).toEqual([0, 2])
   })
 
   it('extract() keeps the given keys that exist', () => {
-    const rows = collect<{ a: number; b?: number; c?: number }>([{ a: 1, b: 2, c: 3 }, { a: 4 }])
+    const rows = collect<{ a: number; b?: number; c?: number }>([
+      { a: 1, b: 2, c: 3 },
+      { a: 4 },
+    ])
     expect([...rows.extract(['a', 'b'])]).toEqual([{ a: 1, b: 2 }, { a: 4 }])
   })
 
   it('extract() gives an empty object for an item that is not an object', () => {
-    expect([...collect<unknown>([1, null]).extract([] as never[])]).toEqual([{}, {}])
+    expect([...collect<unknown>([1, null]).extract([] as never[])]).toEqual([
+      {},
+      {},
+    ])
   })
 
   it('recursive() converts the nested arrays, also inside plain objects', () => {
@@ -276,7 +319,9 @@ describe('EnhancedArray (utilities)', () => {
   })
 
   it('weightedRandom() refuses weights of another length', () => {
-    expect(() => collect([1, 2]).weightedRandom([1])).toThrow('Weights array must have same length as collection')
+    expect(() => collect([1, 2]).weightedRandom([1])).toThrow(
+      'Weights array must have same length as collection',
+    )
   })
 
   it('weightedRandom() follows the random value and the weights', () => {
@@ -291,7 +336,14 @@ describe('EnhancedArray (utilities)', () => {
     const items = collect([1, 2, 3, 4, 5])
     const second = items.paginate(3, 2)
     expect([...second.data]).toEqual([4, 5])
-    expect(second).toMatchObject({ total: 5, perPage: 3, currentPage: 2, lastPage: 2, from: 4, to: 5 })
+    expect(second).toMatchObject({
+      total: 5,
+      perPage: 3,
+      currentPage: 2,
+      lastPage: 2,
+      from: 4,
+      to: 5,
+    })
 
     expect(items.paginate(3, 10).currentPage).toBe(2)
     expect(items.paginate(3, 0).currentPage).toBe(1)
@@ -299,7 +351,10 @@ describe('EnhancedArray (utilities)', () => {
 
   it('keeps a numeric item when it starts a chunk or is alone on a page', () => {
     expect([...collect([1, 2, 3, 4, 5]).paginate(2, 3).data]).toEqual([5])
-    expect(plain(collect([1, 3, 2]).chunkBy((n) => n % 2))).toEqual([[1, 3], [2]])
+    expect(plain(collect([1, 3, 2]).chunkBy((n) => n % 2))).toEqual([
+      [1, 3],
+      [2],
+    ])
   })
 })
 
@@ -346,7 +401,12 @@ describe('EnhancedArray (constructor and native methods)', () => {
   it('map(), filter(), slice() and concat() return collections with the right content', () => {
     const items = collect([1, 2, 3, 4])
 
-    for (const result of [items.map((n) => n * 2), items.filter((n) => n > 2), items.slice(1, 3), items.concat([5])]) {
+    for (const result of [
+      items.map((n) => n * 2),
+      items.filter((n) => n > 2),
+      items.slice(1, 3),
+      items.concat([5]),
+    ]) {
       expect(result).toBeInstanceOf(EnhancedArray)
     }
 

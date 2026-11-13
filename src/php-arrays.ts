@@ -31,7 +31,10 @@ export const array_chunk = <T>(array: T[], size: number): T[][] => {
  * @param {Function} [callback] The callback function to use
  * @returns {T[]} The filtered array
  */
-export const array_filter = <T>(array: T[], callback?: (value: T, index: number) => boolean): T[] => {
+export const array_filter = <T>(
+  array: T[],
+  callback?: (value: T, index: number) => boolean,
+): T[] => {
   if (!callback) {
     return array.filter((item) => Boolean(item))
   }
@@ -45,7 +48,10 @@ export const array_filter = <T>(array: T[], callback?: (value: T, index: number)
  * @param {T[]} array The array to map over
  * @returns {U[]} The mapped array
  */
-export const array_map = <T, U>(callback: (value: T, index: number) => U, array: T[]): U[] => {
+export const array_map = <T, U>(
+  callback: (value: T, index: number) => U,
+  array: T[],
+): U[] => {
   return array.map(callback)
 }
 
@@ -57,8 +63,15 @@ export const array_map = <T, U>(callback: (value: T, index: number) => U, array:
  * @param {U} initial The initial value
  * @returns {U} The reduced value
  */
-export const array_reduce = <T, U>(array: T[], callback: (carry: U, item: T, index: number) => U, initial: U): U => {
-  return array.reduce((carry, item, index) => callback(carry, item, index), initial)
+export const array_reduce = <T, U>(
+  array: T[],
+  callback: (carry: U, item: T, index: number) => U,
+  initial: U,
+): U => {
+  return array.reduce(
+    (carry, item, index) => callback(carry, item, index),
+    initial,
+  )
 }
 
 /**
@@ -88,7 +101,10 @@ export const array_unique = <T>(array: T[]): T[] => {
  * @param {boolean} [_preserveKeys=false] Whether to preserve keys (ignored for JS arrays)
  * @returns {T[]} The reversed array
  */
-export const array_reverse = <T>(array: T[], _preserveKeys: boolean = false): T[] => {
+export const array_reverse = <T>(
+  array: T[],
+  _preserveKeys: boolean = false,
+): T[] => {
   return [...array].reverse()
 }
 
@@ -100,7 +116,11 @@ export const array_reverse = <T>(array: T[], _preserveKeys: boolean = false): T[
  * @param {number} [length] The length of the slice
  * @returns {T[]} The sliced portion of the array
  */
-export const array_slice = <T>(array: T[], offset: number, length?: number): T[] => {
+export const array_slice = <T>(
+  array: T[],
+  offset: number,
+  length?: number,
+): T[] => {
   const start = offset < 0 ? Math.max(0, array.length + offset) : offset
   const end = length !== undefined ? start + length : undefined
   return array.slice(start, end)
@@ -115,7 +135,12 @@ export const array_slice = <T>(array: T[], offset: number, length?: number): T[]
  * @param {...T[]} replacement The elements to replace with
  * @returns {T[]} The modified array (copy)
  */
-export const array_splice = <T>(array: T[], offset: number, length?: number, ...replacement: T[]): T[] => {
+export const array_splice = <T>(
+  array: T[],
+  offset: number,
+  length?: number,
+  ...replacement: T[]
+): T[] => {
   const result = [...array]
   const actualLength = length ?? result.length - offset
   result.splice(offset, actualLength, ...replacement)
@@ -226,7 +251,10 @@ export const array_product = (array: number[]): number => {
  * @param {number} [num=1] The number of entries to pick
  * @returns {T | T[] | undefined} The random entry or entries
  */
-export const array_rand = <T>(array: T[], num: number = 1): T | T[] | undefined => {
+export const array_rand = <T>(
+  array: T[],
+  num: number = 1,
+): T | T[] | undefined => {
   if (array.length === 0) {
     return num === 1 ? undefined : []
   }
@@ -246,7 +274,9 @@ export const array_rand = <T>(array: T[], num: number = 1): T | T[] | undefined 
  * @param {T[]} array The source array
  * @returns {Record<string, number>} The flipped record
  */
-export const array_flip = <T extends string | number>(array: T[]): Record<string, number> => {
+export const array_flip = <T extends string | number>(
+  array: T[],
+): Record<string, number> => {
   const result: Record<string, number> = {}
   array.forEach((value, index) => {
     result[String(value)] = index
@@ -260,11 +290,13 @@ export const array_flip = <T extends string | number>(array: T[]): Record<string
  * @param {T[]} array The source array
  * @returns {Record<string, number>} A record of values and their counts
  */
-export const array_count_values = <T extends string | number>(array: T[]): Record<string, number> => {
+export const array_count_values = <T extends string | number>(
+  array: T[],
+): Record<string, number> => {
   const result: Record<string, number> = {}
   array.forEach((value) => {
     const key = String(value)
-    result[key] = (result[key] || 0) + 1
+    result[key] = (result[key] ?? 0) + 1
   })
   return result
 }
@@ -281,8 +313,10 @@ export const array_intersect = <T>(...arrays: T[][]): T[] => {
     return []
   }
 
-  const first = arrays[0]
-  return first.filter((item) => arrays.slice(1).every((arr) => arr.includes(item)))
+  const first = arrays[0] as T[]
+  return first.filter((item) =>
+    arrays.slice(1).every((arr) => arr.includes(item)),
+  )
 }
 
 /**
@@ -304,9 +338,14 @@ export const array_diff = <T>(array1: T[], ...arrays: T[][]): T[] => {
  * @param {K} column The column to retrieve
  * @returns {T[K][]} The array of column values
  */
-export const array_column = <T, K extends keyof T>(array: T[], column: K): T[K][] => {
+export const array_column = <T, K extends keyof T>(
+  array: T[],
+  column: K,
+): T[K][] => {
   return array
-    .map((item) => (item && typeof item === 'object' ? item[column] : undefined))
+    .map((item) =>
+      item && typeof item === 'object' ? item[column] : undefined,
+    )
     .filter((value) => value !== undefined) as T[K][]
 }
 
@@ -338,7 +377,10 @@ export const rsort = <T>(array: T[]): T[] => {
  * @param {Function} compareFunction The comparison function
  * @returns {T[]} The sorted array (copy)
  */
-export const usort = <T>(array: T[], compareFunction: (a: T, b: T) => number): T[] => {
+export const usort = <T>(
+  array: T[],
+  compareFunction: (a: T, b: T) => number,
+): T[] => {
   return [...array].sort(compareFunction)
 }
 
@@ -349,7 +391,10 @@ export const usort = <T>(array: T[], compareFunction: (a: T, b: T) => number): T
  * @param {Function} compareFunction The comparison function
  * @returns {T[]} The sorted array (copy)
  */
-export const uasort = <T>(array: T[], compareFunction: (a: T, b: T) => number): T[] => {
+export const uasort = <T>(
+  array: T[],
+  compareFunction: (a: T, b: T) => number,
+): T[] => {
   return [...array].sort(compareFunction)
 }
 
@@ -360,10 +405,13 @@ export const uasort = <T>(array: T[], compareFunction: (a: T, b: T) => number): 
  * @param {Function} compareFunction The comparison function
  * @returns {T[]} The sorted array (copy)
  */
-export const uksort = <T>(array: T[], compareFunction: (a: number, b: number) => number): T[] => {
+export const uksort = <T>(
+  array: T[],
+  compareFunction: (a: number, b: number) => number,
+): T[] => {
   const indices = Array.from({ length: array.length }, (_, i) => i)
   const sortedIndices = indices.sort(compareFunction)
-  return sortedIndices.map((i) => array[i])
+  return sortedIndices.map((i) => array[i] as T)
 }
 
 /**
@@ -376,7 +424,7 @@ export const shuffle = <T>(array: T[]): T[] => {
   const result = [...array]
   for (let i = result.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1))
-    ;[result[i], result[j]] = [result[j], result[i]]
+    ;[result[i], result[j]] = [result[j] as T, result[i] as T]
   }
   return result
 }
@@ -390,7 +438,11 @@ export const shuffle = <T>(array: T[]): T[] => {
  * @param {number} [step=1] The increment used in the range
  * @returns {number[]} The array of elements
  */
-export const range = (start: number, end: number, step: number = 1): number[] => {
+export const range = (
+  start: number,
+  end: number,
+  step: number = 1,
+): number[] => {
   const result: number[] = []
 
   if (step > 0) {
@@ -420,25 +472,34 @@ export const php_array = <T>(items: T[]): EnhancedArray<T> => {
   Object.assign(enhanced, {
     // PHP array functions as methods
     chunk: (size: number) => array_chunk(enhanced, size),
-    merge: (...arrays: T[][]) => new EnhancedArray(...array_merge(enhanced, ...arrays)),
+    merge: (...arrays: T[][]) =>
+      new EnhancedArray(...array_merge(enhanced, ...arrays)),
     unique: () => new EnhancedArray(...array_unique(enhanced)),
-    reverse: (preserveKeys = false) => new EnhancedArray(...array_reverse(enhanced, preserveKeys)),
+    reverse: (preserveKeys = false) =>
+      new EnhancedArray(...array_reverse(enhanced, preserveKeys)),
     search: (needle: T) => array_search(needle, enhanced),
     sum: () => array_sum(enhanced as unknown as number[]),
     product: () => array_product(enhanced as unknown as number[]),
     rand: (num = 1) => array_rand(enhanced, num),
     flip: () => array_flip(enhanced as unknown as (string | number)[]),
-    countValues: () => array_count_values(enhanced as unknown as (string | number)[]),
-    intersect: (...arrays: T[][]) => new EnhancedArray(...array_intersect(enhanced, ...arrays)),
-    diff: (...arrays: T[][]) => new EnhancedArray(...array_diff(enhanced, ...arrays)),
+    countValues: () =>
+      array_count_values(enhanced as unknown as (string | number)[]),
+    intersect: (...arrays: T[][]) =>
+      new EnhancedArray(...array_intersect(enhanced, ...arrays)),
+    diff: (...arrays: T[][]) =>
+      new EnhancedArray(...array_diff(enhanced, ...arrays)),
     column: <K extends keyof T>(column: K) =>
-      (array_column as (arr: unknown[], col: unknown) => T[K][])(enhanced, column),
+      (array_column as (arr: unknown[], col: unknown) => T[K][])(
+        enhanced,
+        column,
+      ),
 
     // PHP sorting as methods
     sort: () => new EnhancedArray(...sort(enhanced)),
     rsort: () => new EnhancedArray(...rsort(enhanced)),
     shuffle: () => new EnhancedArray(...shuffle(enhanced)),
-    usort: (compareFunction: (a: T, b: T) => number) => new EnhancedArray(...usort(enhanced, compareFunction)),
+    usort: (compareFunction: (a: T, b: T) => number) =>
+      new EnhancedArray(...usort(enhanced, compareFunction)),
   })
 
   return enhanced

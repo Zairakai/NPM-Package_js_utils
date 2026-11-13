@@ -11,9 +11,16 @@
  * @param {T} value The value to add
  * @returns {Record<string, unknown>} The resulting record
  */
-export const arrayAdd = <T>(array: T[] | Record<string, T>, key: string, value: T): Record<string, unknown> => {
+export const arrayAdd = <T>(
+  array: T[] | Record<string, T>,
+  key: string,
+  value: T,
+): Record<string, unknown> => {
   const result: Record<string, unknown> = Array.isArray(array)
-    ? (Object.fromEntries(array.map((v, i) => [i, v])) as Record<string, unknown>)
+    ? (Object.fromEntries(array.map((v, i) => [i, v])) as Record<
+        string,
+        unknown
+      >)
     : { ...(array as Record<string, T>) }
   result[key] = value
   return result
@@ -59,7 +66,10 @@ export const arrayDivide = <T>(array: T[]): [string[], T[]] => {
  * @param {string} prepend The string to prepend to keys
  * @returns {Record<string, unknown>} The flattened record
  */
-export const arrayDot = (array: Record<string, unknown>, prepend = ''): Record<string, unknown> => {
+export const arrayDot = (
+  array: Record<string, unknown>,
+  prepend = '',
+): Record<string, unknown> => {
   const result: Record<string, unknown> = {}
 
   for (const [key, value] of Object.entries(array)) {
@@ -111,7 +121,7 @@ export const arrayFirst = <T>(
   }
 
   for (let i = 0; i < array.length; i++) {
-    if (callback(array[i], i)) {
+    if (callback(array[i] as T, i)) {
       return array[i]
     }
   }
@@ -156,7 +166,11 @@ export const arrayFlatten = <T>(array: unknown[], depth = Infinity): T[] => {
  * @param {unknown} [defaultValue] The default value if key not found
  * @returns {unknown} The value at the key or default value
  */
-export const arrayGet = (array: Record<string, unknown>, key: string, defaultValue?: unknown): unknown => {
+export const arrayGet = (
+  array: Record<string, unknown>,
+  key: string,
+  defaultValue?: unknown,
+): unknown => {
   if (!array || typeof array !== 'object') {
     return defaultValue
   }
@@ -186,7 +200,10 @@ export const arrayGet = (array: Record<string, unknown>, key: string, defaultVal
  * @param {string | string[]} keys The key or keys to check
  * @returns {boolean} True if all keys exist, false otherwise
  */
-export const arrayHas = (array: Record<string, unknown>, keys: string | string[]): boolean => {
+export const arrayHas = (
+  array: Record<string, unknown>,
+  keys: string | string[],
+): boolean => {
   if (!array || typeof array !== 'object') {
     return false
   }
@@ -235,7 +252,10 @@ export const arrayOnly = <T>(array: T[], keys: string[]): T[] => {
  * @param {Function} callback The callback to use for filtering
  * @returns {T[]} The filtered array
  */
-export const arrayWhere = <T>(array: T[], callback: (item: T, index: number) => boolean): T[] => {
+export const arrayWhere = <T>(
+  array: T[],
+  callback: (item: T, index: number) => boolean,
+): T[] => {
   if (!Array.isArray(array)) {
     return []
   }
@@ -249,7 +269,10 @@ export const arrayWhere = <T>(array: T[], callback: (item: T, index: number) => 
  * @param {K} key The key to pluck
  * @returns {T[K][]} The plucked values
  */
-export const arrayPluck = <T, K extends keyof T>(array: T[], key: K): T[K][] => {
+export const arrayPluck = <T, K extends keyof T>(
+  array: T[],
+  key: K,
+): T[K][] => {
   if (!Array.isArray(array)) {
     return []
   }
@@ -265,7 +288,10 @@ export const arrayPluck = <T, K extends keyof T>(array: T[], key: K): T[K][] => 
  * @param {keyof T | Function} keyOrFn The key or callback to group by
  * @returns {Record<string, T[]>} The grouped items
  */
-export const arrayGroupBy = <T>(array: T[], keyOrFn: keyof T | ((item: T) => string | number)): Record<string, T[]> => {
+export const arrayGroupBy = <T>(
+  array: T[],
+  keyOrFn: keyof T | ((item: T) => string | number),
+): Record<string, T[]> => {
   if (!Array.isArray(array)) {
     return {}
   }
@@ -277,9 +303,7 @@ export const arrayGroupBy = <T>(array: T[], keyOrFn: keyof T | ((item: T) => str
           ? String(keyOrFn(item))
           : String(item && typeof item === 'object' ? item[keyOrFn] : item)
 
-      if (!groups[key]) {
-        groups[key] = []
-      }
+      groups[key] ??= []
       groups[key].push(item)
 
       return groups
