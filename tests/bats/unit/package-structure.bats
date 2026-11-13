@@ -262,3 +262,12 @@ teardown() {
     assert_file_contains "${PROJECT_ROOT}/README.md" "<summary>${title}"
   done
 }
+
+@test "no file says that the package has no dependency: it depends on dayjs" {
+  cd "${PROJECT_ROOT}"
+
+  run git grep -niE -e 'zero[ -]?dependenc' -e 'zero external' -e 'no dependenc' -- README.md CONTRIBUTING.md SECURITY.md package.json docs/index.md docs/.vitepress/config.ts assets/banner.svg
+
+  [ "$status" -eq 1 ]
+  [ -z "$output" ]
+}

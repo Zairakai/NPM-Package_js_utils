@@ -27,7 +27,7 @@
 | **✨ Feature Requests** | Describe the use case. Must fit the scope (utility functions, Laravel-style helpers, TypeScript). |
 | **🔤 String Helpers** | In `src/str.ts`. Use camelCase. No `any`. Add JSDoc. Maintain backward compatibility. |
 | **🔢 Number / Array Helpers** | In `src/number.ts` or `src/arrays.ts`. Cover edge cases (empty, NaN, null) in Vitest tests. |
-| **✅ Validation / Format** | In `src/validators.ts` or `src/formatters.ts`. Zero external dependencies unless justified. |
+| **✅ Validation / Format** | In `src/validators.ts` or `src/formatters.ts`. Add no new dependency unless it is justified. |
 | **📦 Types & Exports** | Keep `src/index.ts` exports stable. Breaking changes require major version bump. |
 
 ---
