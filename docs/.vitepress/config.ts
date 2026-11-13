@@ -27,7 +27,7 @@ const project = 'https://gitlab.com/zairakai/npm-packages/js-utils'
 export default defineConfig({
   title: '@zairakai/js-utils',
   description:
-    'Zero-dependency JavaScript utilities: arrays, strings, numbers, objects, dates, formatters and PHP-style helpers.',
+    'JavaScript utilities: arrays, strings, numbers, objects, dates, formatters and PHP-style helpers.',
   base: process.env.DOCS_BASE ?? '/',
   cleanUrls: true,
   lastUpdated: true,

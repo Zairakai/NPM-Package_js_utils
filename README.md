@@ -19,7 +19,7 @@
 [![Vitest][vitest-badge]][vitest]
 [![Knip][knip-badge]][knip]
 
-Zero-dependency utilities for arrays, strings, numbers, objects, dates, validation and formatting. Inspired by Laravel's helpers, with modern TypeScript support.
+Utilities for arrays, strings, numbers, objects, dates, validation and formatting. Inspired by Laravel's helpers, with modern TypeScript support.
 
 **Documentation: [js-utils-4f932b.gitlab.io][docs]**
 
@@ -36,7 +36,7 @@ Zero-dependency utilities for arrays, strings, numbers, objects, dates, validati
 - **Runtime Schemas** — Pre-defined Zod schemas for common data types (Email, Phone, URL, etc.)
 - **Deep Equality** — Robust deep comparison and diffing utilities
 - **Type Guards** — Reliable type checking (isRecord, isEmail, etc.)
-- **DateTime** — Lightweight wrapper around dayjs with useful presets
+- **DateTime** — Wrapper around dayjs with useful presets
 
 ---
 
@@ -289,7 +289,7 @@ make quality          # run full quality suite
 [license]: ./LICENSE
 [security-badge]: https://img.shields.io/badge/security-scanned-green.svg
 [security]: ./SECURITY.md
-[issues-badge]: https://img.shields.io/gitlab/issues/open-raw/zairakai%2Fnpm-packages%2Fhelpers?logo=gitlab&label=Issues
+[issues-badge]: https://img.shields.io/gitlab/issues/open-raw/zairakai%2Fnpm-packages%2Fjs-utils?logo=gitlab&label=Issues
 [issues]: https://gitlab.com/zairakai/npm-packages/js-utils/-/issues
 [node-badge]: https://img.shields.io/badge/node.js-%3E%3D24-green.svg?logo=node.js
 [node]: https://nodejs.org
