@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { diff, isEqual } from './equals.js'
-import { GenericRecord } from './types.js'
+import { type GenericRecord } from './types.js'
 
 /**
  * Validator class inspired by Laravel's Validator facade
@@ -14,7 +14,10 @@ export class Validator {
    * @param {T | z.ZodObject<T>} rules The validation rules (Zod shape or object)
    * @returns {ValidationInstance<z.ZodObject<T>>} A new ValidationInstance
    */
-  static make<T extends z.ZodRawShape>(data: unknown, rules: T | z.ZodObject<T>) {
+  static make<T extends z.ZodRawShape>(
+    data: unknown,
+    rules: T | z.ZodObject<T>,
+  ) {
     const schema = rules instanceof z.ZodObject ? rules : z.object(rules)
     return new ValidationInstance(data, schema)
   }
@@ -27,7 +30,10 @@ export class Validator {
    * @returns {z.infer<z.ZodObject<T>>} The validated data
    * @throws {z.ZodError} If validation fails
    */
-  static validate<T extends z.ZodRawShape>(data: unknown, rules: T | z.ZodObject<T>) {
+  static validate<T extends z.ZodRawShape>(
+    data: unknown,
+    rules: T | z.ZodObject<T>,
+  ) {
     const schema = rules instanceof z.ZodObject ? rules : z.object(rules)
     return schema.parse(data)
   }
@@ -99,9 +105,7 @@ export class ValidationInstance<T extends z.ZodTypeAny> {
     const errors: Record<string, string[]> = {}
     this.result.error.issues.forEach((err: z.ZodIssue) => {
       const path = err.path.join('.') || 'root'
-      if (!errors[path]) {
-        errors[path] = []
-      }
+      errors[path] ??= []
       errors[path].push(err.message)
     })
 
@@ -141,7 +145,9 @@ export class ValidationInstance<T extends z.ZodTypeAny> {
     if (this.result.success) {
       return []
     }
-    return this.result.error.issues.map((err: z.ZodIssue) => `${err.path.join('.')}: ${err.message}`)
+    return this.result.error.issues.map(
+      (err: z.ZodIssue) => `${err.path.join('.')}: ${err.message}`,
+    )
   }
 }
 
@@ -152,6 +158,9 @@ export class ValidationInstance<T extends z.ZodTypeAny> {
  * @param {T | z.ZodObject<T>} rules The validation rules
  * @returns {ValidationInstance<z.ZodObject<T>>} A new ValidationInstance
  */
-export const validator = <T extends z.ZodRawShape>(data: unknown, rules: T | z.ZodObject<T>) => {
+export const validator = <T extends z.ZodRawShape>(
+  data: unknown,
+  rules: T | z.ZodObject<T>,
+) => {
   return Validator.make(data, rules)
 }

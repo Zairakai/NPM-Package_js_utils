@@ -123,9 +123,9 @@ export class EnhancedArray<T> extends Array<T> {
    */
   pluck<K extends keyof T>(key: K): EnhancedArray<T[K]> {
     return new EnhancedArray(
-      ...(this.map((item) => (item && typeof item === 'object' ? item[key] : undefined)).filter(
-        (val) => val !== undefined,
-      ) as T[K][]),
+      ...(this.map((item) =>
+        item && typeof item === 'object' ? item[key] : undefined,
+      ).filter((val) => val !== undefined) as T[K][]),
     )
   }
 
@@ -135,17 +135,19 @@ export class EnhancedArray<T> extends Array<T> {
    * @param {K | Callback<T, string | number>} key The key or callback to group by
    * @returns {Record<string, EnhancedArray<T>>} A record of grouped collections
    */
-  groupBy<K extends keyof T>(key: K | Callback<T, string | number>): Record<string, EnhancedArray<T>> {
+  groupBy<K extends keyof T>(
+    key: K | Callback<T, string | number>,
+  ): Record<string, EnhancedArray<T>> {
     const groups: Record<string, EnhancedArray<T>> = {}
 
     for (let i = 0; i < this.length; i++) {
-      const item = this[i]
+      const item = this[i] as T
       const groupKey =
-        typeof key === 'function' ? String(key(item, i)) : String(item && typeof item === 'object' ? item[key] : item)
+        typeof key === 'function'
+          ? String(key(item, i))
+          : String(item && typeof item === 'object' ? item[key] : item)
 
-      if (!groups[groupKey]) {
-        groups[groupKey] = new EnhancedArray<T>()
-      }
+      groups[groupKey] ??= new EnhancedArray<T>()
       groups[groupKey].push(item)
     }
 
@@ -236,7 +238,10 @@ export class EnhancedArray<T> extends Array<T> {
       positions = count + positions
     }
 
-    return new EnhancedArray(...this.slice(positions), ...this.slice(0, positions))
+    return new EnhancedArray(
+      ...this.slice(positions),
+      ...this.slice(0, positions),
+    )
   }
 
   /**
@@ -250,7 +255,7 @@ export class EnhancedArray<T> extends Array<T> {
     let currentChunk = new EnhancedArray<T>()
 
     for (let i = 0; i < this.length; i++) {
-      const item = this[i]
+      const item = this[i] as T
 
       if (currentChunk.length > 0 && !predicate(item, i)) {
         chunks.push(currentChunk)
@@ -277,7 +282,9 @@ export class EnhancedArray<T> extends Array<T> {
       return new EnhancedArray()
     }
 
-    const maxLength = Math.max(...this.map((row) => (Array.isArray(row) ? row.length : 1)))
+    const maxLength = Math.max(
+      ...this.map((row) => (Array.isArray(row) ? row.length : 1)),
+    )
 
     const result = new EnhancedArray<EnhancedArray<unknown>>()
 
@@ -310,8 +317,8 @@ export class EnhancedArray<T> extends Array<T> {
     }
 
     for (let i = 1; i < this.length; i++) {
-      const prev = this[i - 1]
-      const current = this[i]
+      const prev = this[i - 1] as T
+      const current = this[i] as T
 
       if (compareFn) {
         if (compareFn(prev, current) > 0) {
@@ -366,7 +373,9 @@ export class EnhancedArray<T> extends Array<T> {
     const count = sorted.length
 
     if (count % 2 === 0) {
-      return ((sorted[count / 2 - 1] as number) + (sorted[count / 2] as number)) / 2
+      return (
+        ((sorted[count / 2 - 1] as number) + (sorted[count / 2] as number)) / 2
+      )
     }
 
     return sorted[Math.floor(count / 2)] as number
@@ -386,7 +395,11 @@ export class EnhancedArray<T> extends Array<T> {
     const frequencies = this.frequencies(accessor)
     const maxFrequency = Math.max(...Object.values(frequencies))
 
-    return new EnhancedArray(...Object.keys(frequencies).filter((key) => frequencies[key] === maxFrequency))
+    return new EnhancedArray(
+      ...Object.keys(frequencies).filter(
+        (key) => frequencies[key] === maxFrequency,
+      ),
+    )
   }
 
   /**
@@ -401,7 +414,11 @@ export class EnhancedArray<T> extends Array<T> {
     }
 
     const values = accessor ? this.map(accessor) : (this as unknown as number[])
-    const mean = (values as number[]).reduce((sum, val) => (sum as number) + (val as number), 0) / values.length
+    const mean =
+      (values as number[]).reduce(
+        (sum, val) => (sum as number) + (val as number),
+        0,
+      ) / values.length
     const sumSquaredDifferences = (values as number[]).reduce(
       (sum, val) => (sum as number) + Math.pow((val as number) - mean, 2),
       0,
@@ -417,7 +434,10 @@ export class EnhancedArray<T> extends Array<T> {
    * @param {Callback<T, number>} [accessor] Optional accessor for non-numeric items
    * @returns {number | null} The percentile value or null if collection is empty
    */
-  percentile(percentile: number, accessor?: Callback<T, number>): number | null {
+  percentile(
+    percentile: number,
+    accessor?: Callback<T, number>,
+  ): number | null {
     if (this.length === 0) {
       return null
     }
@@ -433,7 +453,10 @@ export class EnhancedArray<T> extends Array<T> {
     }
 
     const weight = index - lower
-    return (sorted[lower] as number) * (1 - weight) + (sorted[upper] as number) * weight
+    return (
+      (sorted[lower] as number) * (1 - weight) +
+      (sorted[upper] as number) * weight
+    )
   }
 
   /**
@@ -446,9 +469,9 @@ export class EnhancedArray<T> extends Array<T> {
     const frequencies: Record<string, number> = {}
 
     for (let i = 0; i < this.length; i++) {
-      const item = this[i]
+      const item = this[i] as T
       const key = accessor ? String(accessor(item, i)) : String(item)
-      frequencies[key] = (frequencies[key] || 0) + 1
+      frequencies[key] = (frequencies[key] ?? 0) + 1
     }
 
     return frequencies
@@ -466,13 +489,17 @@ export class EnhancedArray<T> extends Array<T> {
 
     const allArrays = [this, ...arrays]
 
-    function* cartesianProduct(arrays: unknown[][], index = 0, current: unknown[] = []): Generator<unknown[]> {
+    function* cartesianProduct(
+      arrays: unknown[][],
+      index = 0,
+      current: unknown[] = [],
+    ): Generator<unknown[]> {
       if (index === arrays.length) {
         yield [...current]
         return
       }
 
-      for (const item of arrays[index]) {
+      for (const item of arrays[index] as T[]) {
         yield* cartesianProduct(arrays, index + 1, [...current, item])
       }
     }
@@ -498,7 +525,7 @@ export class EnhancedArray<T> extends Array<T> {
     for (let i = 0; i < maxLength; i++) {
       for (const array of allArrays) {
         if (i < array.length) {
-          result.push(array[i])
+          result.push(array[i] as T)
         }
       }
     }
@@ -567,7 +594,9 @@ export class EnhancedArray<T> extends Array<T> {
    * @param {K | Callback<T, unknown>} key The key or callback to chunk by
    * @returns {EnhancedArray<EnhancedArray<T>>} A collection of chunked collections
    */
-  chunkBy<K extends keyof T>(key: K | Callback<T, unknown>): EnhancedArray<EnhancedArray<T>> {
+  chunkBy<K extends keyof T>(
+    key: K | Callback<T, unknown>,
+  ): EnhancedArray<EnhancedArray<T>> {
     if (this.length === 0) {
       return new EnhancedArray()
     }
@@ -577,9 +606,13 @@ export class EnhancedArray<T> extends Array<T> {
     let lastValue: unknown = null
 
     for (let i = 0; i < this.length; i++) {
-      const item = this[i]
+      const item = this[i] as T
       const currentValue =
-        typeof key === 'function' ? key(item, i) : item && typeof item === 'object' ? item[key] : item
+        typeof key === 'function'
+          ? key(item, i)
+          : item && typeof item === 'object'
+            ? item[key]
+            : item
 
       if (i === 0 || currentValue === lastValue) {
         currentChunk.push(item)
@@ -605,11 +638,13 @@ export class EnhancedArray<T> extends Array<T> {
    * @param {Function} callback The callback to map items
    * @returns {EnhancedArray<U>} A new mapped and filtered collection
    */
-  filterMap<U>(callback: (item: T, index: number) => U | null | undefined): EnhancedArray<U> {
+  filterMap<U>(
+    callback: (item: T, index: number) => U | null | undefined,
+  ): EnhancedArray<U> {
     const result = new EnhancedArray<U>()
 
     for (let i = 0; i < this.length; i++) {
-      const mapped = callback(this[i], i)
+      const mapped = callback(this[i] as T, i)
       if (mapped !== null && mapped !== undefined) {
         result.push(mapped)
       }
@@ -654,7 +689,7 @@ export class EnhancedArray<T> extends Array<T> {
       this.push(item)
       return item
     }
-    return this[0]
+    return this[0] as T
   }
 
   /**
@@ -666,7 +701,7 @@ export class EnhancedArray<T> extends Array<T> {
   getNth(n: number): EnhancedArray<T> {
     const result = new EnhancedArray<T>()
     for (let i = n - 1; i < this.length; i += n) {
-      result.push(this[i])
+      result.push(this[i] as T)
     }
     return result
   }
@@ -687,7 +722,10 @@ export class EnhancedArray<T> extends Array<T> {
       throw new Error('Weights array must have same length as collection')
     }
 
-    const totalWeight = effectiveWeights.reduce((sum, weight) => sum + weight, 0)
+    const totalWeight = effectiveWeights.reduce(
+      (sum, weight) => sum + weight,
+      0,
+    )
     const random = Math.random() * totalWeight
 
     let currentWeight = 0
@@ -818,7 +856,9 @@ export class EnhancedMap<K, V> extends Map<K, V> {
   pluck<P extends keyof V>(key: P): EnhancedArray<V[P]> {
     return new EnhancedArray(
       ...(Array.from(this.values())
-        .map((value) => (value && typeof value === 'object' ? value[key] : undefined))
+        .map((value) =>
+          value && typeof value === 'object' ? value[key] : undefined,
+        )
         .filter((val) => val !== undefined) as V[P][]),
     )
   }
@@ -829,15 +869,15 @@ export class EnhancedMap<K, V> extends Map<K, V> {
    * @param {Function} accessor The accessor to group by
    * @returns {Record<string, EnhancedArray<[K, V]>>} A record of grouped entries
    */
-  groupBy(accessor: (value: V, key: K) => string | number): Record<string, EnhancedArray<[K, V]>> {
+  groupBy(
+    accessor: (value: V, key: K) => string | number,
+  ): Record<string, EnhancedArray<[K, V]>> {
     const groups: Record<string, EnhancedArray<[K, V]>> = {}
 
     for (const [key, value] of this) {
       const groupKey = String(accessor(value, key))
 
-      if (!groups[groupKey]) {
-        groups[groupKey] = new EnhancedArray<[K, V]>()
-      }
+      groups[groupKey] ??= new EnhancedArray<[K, V]>()
 
       groups[groupKey].push([key, value])
     }
@@ -885,6 +925,8 @@ export const collect = <T>(items: T[]): EnhancedArray<T> => {
  * @param {Iterable<[K, V]>} [entries] Optional entries to initialize the map
  * @returns {EnhancedMap<K, V>} A new EnhancedMap instance
  */
-export const collectMap = <K, V>(entries?: Iterable<[K, V]>): EnhancedMap<K, V> => {
+export const collectMap = <K, V>(
+  entries?: Iterable<[K, V]>,
+): EnhancedMap<K, V> => {
   return new EnhancedMap(entries)
 }

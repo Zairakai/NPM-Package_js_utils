@@ -1,4 +1,4 @@
-import { GenericRecord } from './types.js'
+import { type GenericRecord } from './types.js'
 
 /**
  * Deep equality and comparison utilities
@@ -58,7 +58,10 @@ export const isEqual = (a: unknown, b: unknown): boolean => {
     }
 
     if (a.constructor === RegExp) {
-      return (a as RegExp).source === (b as RegExp).source && (a as RegExp).flags === (b as RegExp).flags
+      return (
+        (a as RegExp).source === (b as RegExp).source &&
+        (a as RegExp).flags === (b as RegExp).flags
+      )
     }
     if (a.valueOf !== Object.prototype.valueOf) {
       return a.valueOf() === b.valueOf()
@@ -105,14 +108,22 @@ export const diff = (original: unknown, current: unknown): GenericRecord => {
     return result
   }
 
-  if (!original || !current || typeof original !== 'object' || typeof current !== 'object') {
+  if (
+    !original ||
+    !current ||
+    typeof original !== 'object' ||
+    typeof current !== 'object'
+  ) {
     return (current as GenericRecord) || {}
   }
 
   const originalObj = original as GenericRecord
   const currentObj = current as GenericRecord
 
-  const keys = new Set([...Object.keys(originalObj), ...Object.keys(currentObj)])
+  const keys = new Set([
+    ...Object.keys(originalObj),
+    ...Object.keys(currentObj),
+  ])
 
   for (const key of keys) {
     if (!isEqual(originalObj[key], currentObj[key])) {

@@ -14,7 +14,9 @@ export const capitalize = (value: unknown): string => {
   }
 
   const stringValue = String(value)
-  return stringValue.charAt(0).toUpperCase() + stringValue.slice(1).toLowerCase()
+  return (
+    stringValue.charAt(0).toUpperCase() + stringValue.slice(1).toLowerCase()
+  )
 }
 
 /**
@@ -53,7 +55,9 @@ export const strLimit = (value: unknown, size: number): string => {
   }
 
   const stringValue = String(value)
-  return stringValue.length <= size ? stringValue : `${stringValue.slice(0, size)}…`
+  return stringValue.length <= size
+    ? stringValue
+    : `${stringValue.slice(0, size)}…`
 }
 
 /**
@@ -62,7 +66,9 @@ export const strLimit = (value: unknown, size: number): string => {
  * @param {string | null | undefined} value The string to normalize
  * @returns {string | null | undefined} The normalized string
  */
-export const normalizeString = (value: string | null | undefined): string | null | undefined => {
+export const normalizeString = (
+  value: string | null | undefined,
+): string | null | undefined => {
   if (!value) {
     return value
   }
@@ -82,7 +88,10 @@ export const normalizeString = (value: string | null | undefined): string | null
  * @param {string[]} needles The values to search for
  * @returns {boolean} True if all values are found
  */
-export const strContainsAll = (haystack: string, needles: string[]): boolean => {
+export const strContainsAll = (
+  haystack: string,
+  needles: string[],
+): boolean => {
   if (!haystack || !Array.isArray(needles)) {
     return false
   }
@@ -96,7 +105,10 @@ export const strContainsAll = (haystack: string, needles: string[]): boolean => 
  * @param {string[]} needles The values to search for
  * @returns {boolean} True if any value is found
  */
-export const strContainsAny = (haystack: string, needles: string[]): boolean => {
+export const strContainsAny = (
+  haystack: string,
+  needles: string[],
+): boolean => {
   if (!haystack || !Array.isArray(needles)) {
     return false
   }
@@ -199,12 +211,19 @@ export const strReverse = (value: string): string => {
  * @param {boolean} [caseSensitive=true] Whether to perform case-sensitive removal
  * @returns {string} The resulting string
  */
-export const strRemove = (search: string, subject: string, caseSensitive = true): string => {
+export const strRemove = (
+  search: string,
+  subject: string,
+  caseSensitive = true,
+): string => {
   if (!search || !subject) {
     return subject
   }
   const flags = caseSensitive ? 'g' : 'gi'
-  return subject.replace(new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), flags), '')
+  return subject.replace(
+    new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), flags),
+    '',
+  )
 }
 
 /**
@@ -216,13 +235,20 @@ export const strRemove = (search: string, subject: string, caseSensitive = true)
  * @param {number} [length] The number of characters to mask
  * @returns {string} The masked string
  */
-export const strMask = (str: string, character: string, index: number, length?: number): string => {
+export const strMask = (
+  str: string,
+  character: string,
+  index: number,
+  length?: number,
+): string => {
   if (!str) {
     return str
   }
   const start = Math.max(0, index)
   const end = length !== undefined ? start + length : str.length
-  return str.substring(0, start) + character.repeat(end - start) + str.substring(end)
+  return (
+    str.substring(0, start) + character.repeat(end - start) + str.substring(end)
+  )
 }
 
 // Word helpers
@@ -335,7 +361,11 @@ export const titleCase = (value: string): string => {
  * @param {string} [locale='en-US'] The locale to use for formatting
  * @returns {string} The formatted number
  */
-export const numberFormat = (value: number, decimals: number = 2, locale: string = 'en-US'): string => {
+export const numberFormat = (
+  value: number,
+  decimals: number = 2,
+  locale: string = 'en-US',
+): string => {
   return new Intl.NumberFormat(locale, {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,

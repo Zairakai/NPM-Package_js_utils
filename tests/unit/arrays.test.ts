@@ -211,7 +211,10 @@ describe('arrayUnique()', () => {
   })
 
   it('removes duplicates by object key', () => {
-    expect(arrayUnique([{ id: 1 }, { id: 1 }, { id: 2 }], 'id')).toEqual([{ id: 1 }, { id: 2 }])
+    expect(arrayUnique([{ id: 1 }, { id: 1 }, { id: 2 }], 'id')).toEqual([
+      { id: 1 },
+      { id: 2 },
+    ])
   })
 
   it('returns empty for non-array input', () => {

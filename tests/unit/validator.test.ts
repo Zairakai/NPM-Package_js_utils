@@ -37,7 +37,9 @@ describe('Validator.make()', () => {
   })
 
   it('validated() throws when the validation failed', () => {
-    expect(() => Validator.make({ name: 'A', age: 36 }, rules).validated()).toThrow('Validation failed')
+    expect(() =>
+      Validator.make({ name: 'A', age: 36 }, rules).validated(),
+    ).toThrow('Validation failed')
   })
 
   it('reports an error without path under "root"', () => {
@@ -47,21 +49,30 @@ describe('Validator.make()', () => {
   })
 
   it('accepts a Zod object instead of a shape', () => {
-    expect(Validator.make({ name: 'Ada', age: 36 }, z.object(rules)).passes()).toBe(true)
+    expect(
+      Validator.make({ name: 'Ada', age: 36 }, z.object(rules)).passes(),
+    ).toBe(true)
   })
 })
 
 describe('Validator.validate()', () => {
   it('returns the parsed data', () => {
-    expect(Validator.validate({ name: 'Ada', age: 36 }, rules)).toEqual({ name: 'Ada', age: 36 })
+    expect(Validator.validate({ name: 'Ada', age: 36 }, rules)).toEqual({
+      name: 'Ada',
+      age: 36,
+    })
   })
 
   it('throws a ZodError when the data is invalid', () => {
-    expect(() => Validator.validate({ name: 'A', age: 36 }, rules)).toThrow(z.ZodError)
+    expect(() => Validator.validate({ name: 'A', age: 36 }, rules)).toThrow(
+      z.ZodError,
+    )
   })
 
   it('accepts a Zod object instead of a shape', () => {
-    expect(Validator.validate({ name: 'Ada', age: 36 }, z.object(rules))).toEqual({ name: 'Ada', age: 36 })
+    expect(
+      Validator.validate({ name: 'Ada', age: 36 }, z.object(rules)),
+    ).toEqual({ name: 'Ada', age: 36 })
   })
 })
 

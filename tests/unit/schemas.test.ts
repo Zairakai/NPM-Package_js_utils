@@ -39,7 +39,9 @@ describe('PhoneSchema', () => {
 describe('UrlSchema', () => {
   it('accepts valid URLs', () => {
     expect(() => UrlSchema.parse('https://example.com')).not.toThrow()
-    expect(() => UrlSchema.parse('https://sub.domain.io/path?q=1')).not.toThrow()
+    expect(() =>
+      UrlSchema.parse('https://sub.domain.io/path?q=1'),
+    ).not.toThrow()
   })
 
   it('rejects invalid URLs', () => {
@@ -74,13 +76,24 @@ describe('ApiResponseSchema()', () => {
 
   it('validates an error response without data', () => {
     const schema = ApiResponseSchema(z.string())
-    expect(() => schema.parse({ success: false, message: 'error', errors: ['field: required'] })).not.toThrow()
+    expect(() =>
+      schema.parse({
+        success: false,
+        message: 'error',
+        errors: ['field: required'],
+      }),
+    ).not.toThrow()
   })
 })
 
 describe('PaginationSchema', () => {
   it('validates pagination data', () => {
-    const result = PaginationSchema.parse({ page: 2, perPage: 20, total: 100, lastPage: 5 })
+    const result = PaginationSchema.parse({
+      page: 2,
+      perPage: 20,
+      total: 100,
+      lastPage: 5,
+    })
     expect(result.page).toBe(2)
   })
 
@@ -112,7 +125,9 @@ describe('validateSchema()', () => {
   })
 
   it('throws with error details on failure', () => {
-    expect(() => validateSchema(schema, { name: 42 })).toThrow('Validation failed')
+    expect(() => validateSchema(schema, { name: 42 })).toThrow(
+      'Validation failed',
+    )
   })
 })
 

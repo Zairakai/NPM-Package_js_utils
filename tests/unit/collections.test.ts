@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import { EnhancedArray, EnhancedMap, collect, collectMap } from '../../src/collections'
+import {
+  EnhancedArray,
+  EnhancedMap,
+  collect,
+  collectMap,
+} from '../../src/collections'
 
 describe('EnhancedArray', () => {
   it('constructs from items', () => {
@@ -195,7 +200,7 @@ describe('EnhancedArray', () => {
 
   it('chunkWhile() groups consecutive matching items', () => {
     const arr = EnhancedArray.from([1, 2, 4, 9, 10, 11, 12, 15])
-    // chunkWhile receives (item, index) — split when consecutive condition fails
+    // chunkWhile receives (item, index) - split when consecutive condition fails
     const chunks = arr.chunkWhile((n, i) => 0 < i && n === arr[i - 1] + 1)
     expect(chunks.length).toBeGreaterThan(1)
   })

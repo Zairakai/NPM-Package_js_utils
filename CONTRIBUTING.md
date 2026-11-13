@@ -27,7 +27,7 @@
 | **✨ Feature Requests** | Describe the use case. Must fit the scope (utility functions, Laravel-style helpers, TypeScript). |
 | **🔤 String Helpers** | In `src/str.ts`. Use camelCase. No `any`. Add JSDoc. Maintain backward compatibility. |
 | **🔢 Number / Array Helpers** | In `src/number.ts` or `src/arrays.ts`. Cover edge cases (empty, NaN, null) in Vitest tests. |
-| **✅ Validation / Format** | In `src/validators.ts` or `src/formatters.ts`. Zero external dependencies unless justified. |
+| **✅ Validation / Format** | In `src/validators.ts` or `src/formatters.ts`. Add no new dependency unless it is justified. |
 | **📦 Types & Exports** | Keep `src/index.ts` exports stable. Breaking changes require major version bump. |
 
 ---
@@ -46,14 +46,6 @@
 | `make test` | Vitest | Run the unit tests. |
 | `make test-coverage` | Vitest | Run the unit tests with the coverage report (`coverage/`): 75 % at least, as the base requires. |
 | `make bats` | BATS | Run shell script integration tests. |
-
---- | :--- | :--- |
-| `make quality` | All | Full quality gate (lint, format, typecheck, tests). |
-| `make eslint` | ESLint | JavaScript/TypeScript linting. |
-| `make prettier` | Prettier | Code formatting check. |
-| `make test` | Vitest | Run unit tests with coverage. |
-| `make bats` | BATS | Run shell script integration tests. |
-| `make markdownlint` | Markdownlint | Validate Markdown documentation. |
 
 ---
 

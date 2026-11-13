@@ -3,7 +3,13 @@ import { z } from 'zod'
 import { num } from '../../src/number'
 import { obj } from '../../src/obj'
 import { pipe } from '../../src/pipe'
-import { isRecord, optional, retry, throw_if, throw_unless } from '../../src/runtime'
+import {
+  isRecord,
+  optional,
+  retry,
+  throw_if,
+  throw_unless,
+} from '../../src/runtime'
 import { str } from '../../src/str'
 import { validator } from '../../src/validator'
 

@@ -2,7 +2,7 @@
  * Date and time utilities using Day.js
  */
 
-import dayjsModule, { ConfigType, Dayjs } from 'dayjs'
+import dayjsModule, { type ConfigType, Dayjs } from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
@@ -84,7 +84,8 @@ export const fromNow = (date: ConfigType): string => dayjs(date).fromNow()
  * @param {ConfigType} date Date to check
  * @returns {boolean} True if the date is today
  */
-export const isToday = (date: ConfigType): boolean => dayjs(date).isSame(dayjs(), 'day')
+export const isToday = (date: ConfigType): boolean =>
+  dayjs(date).isSame(dayjs(), 'day')
 
 /**
  * Check if a date is in the past.
@@ -92,7 +93,8 @@ export const isToday = (date: ConfigType): boolean => dayjs(date).isSame(dayjs()
  * @param {ConfigType} date Date to check
  * @returns {boolean} True if the date is in the past
  */
-export const isPast = (date: ConfigType): boolean => dayjs(date).isBefore(dayjs())
+export const isPast = (date: ConfigType): boolean =>
+  dayjs(date).isBefore(dayjs())
 
 /**
  * Check if a date is in the future.
@@ -100,4 +102,5 @@ export const isPast = (date: ConfigType): boolean => dayjs(date).isBefore(dayjs(
  * @param {ConfigType} date Date to check
  * @returns {boolean} True if the date is in the future
  */
-export const isFuture = (date: ConfigType): boolean => dayjs(date).isAfter(dayjs())
+export const isFuture = (date: ConfigType): boolean =>
+  dayjs(date).isAfter(dayjs())
