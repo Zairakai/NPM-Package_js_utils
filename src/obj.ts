@@ -63,7 +63,10 @@ export class Objectable<T extends Record<string, unknown>> {
    */
   isDirty(key?: string): boolean {
     if (key) {
-      return !isEqual(data_get(this.originalValue, key), data_get(this.value, key))
+      return !isEqual(
+        data_get(this.originalValue, key),
+        data_get(this.value, key),
+      )
     }
     return !isEqual(this.originalValue, this.value)
   }
@@ -190,7 +193,10 @@ export class Objectable<T extends Record<string, unknown>> {
    * @returns {this} The Objectable instance
    */
   mergeDeep(other: Record<string, unknown>): this {
-    const merge = (target: Record<string, unknown>, source: Record<string, unknown>): Record<string, unknown> => {
+    const merge = (
+      target: Record<string, unknown>,
+      source: Record<string, unknown>,
+    ): Record<string, unknown> => {
       const result: Record<string, unknown> = { ...target }
       for (const key of Object.keys(source)) {
         const srcVal = source[key]
@@ -203,7 +209,10 @@ export class Objectable<T extends Record<string, unknown>> {
           typeof tgtVal === 'object' &&
           !Array.isArray(tgtVal)
         ) {
-          result[key] = merge(tgtVal as Record<string, unknown>, srcVal as Record<string, unknown>)
+          result[key] = merge(
+            tgtVal as Record<string, unknown>,
+            srcVal as Record<string, unknown>,
+          )
         } else {
           result[key] = srcVal
         }
@@ -268,8 +277,14 @@ export class Objectable<T extends Record<string, unknown>> {
    * @param {Function} callback The callback to execute
    * @returns {this} The Objectable instance
    */
-  when(condition: boolean | (() => boolean), callback: (obj: this) => void): this {
-    const shouldExecute = typeof condition === 'function' ? (condition as () => boolean)() : condition
+  when(
+    condition: boolean | (() => boolean),
+    callback: (obj: this) => void,
+  ): this {
+    const shouldExecute =
+      typeof condition === 'function'
+        ? (condition as () => boolean)()
+        : condition
     if (shouldExecute) {
       callback(this)
     }
@@ -283,7 +298,9 @@ export class Objectable<T extends Record<string, unknown>> {
  * @param {T} value The initial value
  * @returns {Objectable<T>} A new Objectable instance
  */
-export const obj = <T extends Record<string, unknown>>(value: T): Objectable<T> => {
+export const obj = <T extends Record<string, unknown>>(
+  value: T,
+): Objectable<T> => {
   return new Objectable(value)
 }
 
@@ -298,6 +315,8 @@ export const Obj = {
   /** Get object values */
   values: (value: Record<string, unknown>) => Object.values(value),
   /** Merge objects */
-  merge: (target: Record<string, unknown>, ...sources: Record<string, unknown>[]) =>
-    Object.assign({}, target, ...sources),
+  merge: (
+    target: Record<string, unknown>,
+    ...sources: Record<string, unknown>[]
+  ) => Object.assign({}, target, ...sources),
 }

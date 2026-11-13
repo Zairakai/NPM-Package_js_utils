@@ -35,38 +35,62 @@ describe('datetime', () => {
     })
 
     it('tomorrow() is the start of the next day', () => {
-      expect(tomorrow().format('YYYY-MM-DD HH:mm:ss')).toBe('2026-06-16 00:00:00')
+      expect(tomorrow().format('YYYY-MM-DD HH:mm:ss')).toBe(
+        '2026-06-16 00:00:00',
+      )
     })
 
     it('yesterday() is the start of the previous day', () => {
-      expect(yesterday().format('YYYY-MM-DD HH:mm:ss')).toBe('2026-06-14 00:00:00')
+      expect(yesterday().format('YYYY-MM-DD HH:mm:ss')).toBe(
+        '2026-06-14 00:00:00',
+      )
     })
   })
 
   describe('isBetweenDates()', () => {
     it('includes both bounds by default', () => {
-      expect(isBetweenDates('2026-06-15', '2026-06-15', '2026-06-20')).toBe(true)
-      expect(isBetweenDates('2026-06-20', '2026-06-15', '2026-06-20')).toBe(true)
+      expect(isBetweenDates('2026-06-15', '2026-06-15', '2026-06-20')).toBe(
+        true,
+      )
+      expect(isBetweenDates('2026-06-20', '2026-06-15', '2026-06-20')).toBe(
+        true,
+      )
     })
 
     it('is true for a date inside the range', () => {
-      expect(isBetweenDates('2026-06-17', '2026-06-15', '2026-06-20')).toBe(true)
+      expect(isBetweenDates('2026-06-17', '2026-06-15', '2026-06-20')).toBe(
+        true,
+      )
     })
 
     it('is false for a date outside the range', () => {
-      expect(isBetweenDates('2026-06-21', '2026-06-15', '2026-06-20')).toBe(false)
-      expect(isBetweenDates('2026-06-14', '2026-06-15', '2026-06-20')).toBe(false)
+      expect(isBetweenDates('2026-06-21', '2026-06-15', '2026-06-20')).toBe(
+        false,
+      )
+      expect(isBetweenDates('2026-06-14', '2026-06-15', '2026-06-20')).toBe(
+        false,
+      )
     })
 
     it('excludes the bounds with "()"', () => {
-      expect(isBetweenDates('2026-06-15', '2026-06-15', '2026-06-20', 'day', '()')).toBe(false)
-      expect(isBetweenDates('2026-06-20', '2026-06-15', '2026-06-20', 'day', '()')).toBe(false)
-      expect(isBetweenDates('2026-06-17', '2026-06-15', '2026-06-20', 'day', '()')).toBe(true)
+      expect(
+        isBetweenDates('2026-06-15', '2026-06-15', '2026-06-20', 'day', '()'),
+      ).toBe(false)
+      expect(
+        isBetweenDates('2026-06-20', '2026-06-15', '2026-06-20', 'day', '()'),
+      ).toBe(false)
+      expect(
+        isBetweenDates('2026-06-17', '2026-06-15', '2026-06-20', 'day', '()'),
+      ).toBe(true)
     })
 
     it('compares with the given unit', () => {
-      expect(isBetweenDates('2026-06-30', '2026-06-01', '2026-06-02', 'month')).toBe(true)
-      expect(isBetweenDates('2026-07-01', '2026-06-01', '2026-06-02', 'month')).toBe(false)
+      expect(
+        isBetweenDates('2026-06-30', '2026-06-01', '2026-06-02', 'month'),
+      ).toBe(true)
+      expect(
+        isBetweenDates('2026-07-01', '2026-06-01', '2026-06-02', 'month'),
+      ).toBe(false)
     })
   })
 

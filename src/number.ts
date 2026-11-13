@@ -115,7 +115,7 @@ export class Numberable {
   ordinal(): string {
     const s = ['th', 'st', 'nd', 'rd']
     const v = this.value % 100
-    return this.value + (s[(v - 20) % 10] || s[v] || s[0])
+    return this.value + ((s[(v - 20) % 10] ?? s[v] ?? s[0]) as string)
   }
 
   /**
@@ -139,7 +139,9 @@ export class Numberable {
    * @returns {boolean} True if the number is between min and max
    */
   isBetween(min: number, max: number, inclusive: boolean = true): boolean {
-    return inclusive ? this.value >= min && this.value <= max : this.value > min && this.value < max
+    return inclusive
+      ? this.value >= min && this.value <= max
+      : this.value > min && this.value < max
   }
 
   /**
@@ -241,8 +243,12 @@ export class Numberable {
    * @param {Function} callback The callback to execute if condition is true
    * @returns {this} The Numberable instance
    */
-  when(condition: boolean | (() => boolean), callback: (num: this) => void): this {
-    const shouldExecute = typeof condition === 'function' ? condition() : condition
+  when(
+    condition: boolean | (() => boolean),
+    callback: (num: this) => void,
+  ): this {
+    const shouldExecute =
+      typeof condition === 'function' ? condition() : condition
     if (shouldExecute) {
       callback(this)
     }
@@ -267,15 +273,20 @@ export const NumberHelper = {
   /** Create a new Numberable instance */
   of: (value: unknown) => new Numberable(value),
   /** Format the number with locale-specific formatting */
-  format: (value: number, decimals = 0, locale = 'en-US') => new Numberable(value).format(decimals, locale),
+  format: (value: number, decimals = 0, locale = 'en-US') =>
+    new Numberable(value).format(decimals, locale),
   /** Format the number as currency */
-  currency: (value: number, currency = 'USD', locale = 'en-US') => new Numberable(value).currency(currency, locale),
+  currency: (value: number, currency = 'USD', locale = 'en-US') =>
+    new Numberable(value).currency(currency, locale),
   /** Format the number as a percentage */
-  percentage: (value: number, decimals = 0, locale = 'en-US') => new Numberable(value).percentage(decimals, locale),
+  percentage: (value: number, decimals = 0, locale = 'en-US') =>
+    new Numberable(value).percentage(decimals, locale),
   /** Format the number as a human-readable file size */
-  fileSize: (value: number, precision = 2) => new Numberable(value).fileSize(precision),
+  fileSize: (value: number, precision = 2) =>
+    new Numberable(value).fileSize(precision),
   /** Abbreviate the number */
-  abbreviate: (value: number, precision = 1) => new Numberable(value).abbreviate(precision),
+  abbreviate: (value: number, precision = 1) =>
+    new Numberable(value).abbreviate(precision),
   /** Add an ordinal suffix to the number */
   ordinal: (value: number) => new Numberable(value).ordinal(),
 }

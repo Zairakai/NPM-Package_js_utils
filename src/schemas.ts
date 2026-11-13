@@ -8,12 +8,17 @@ import { z } from 'zod'
 /**
  * Email validation schema
  */
-export const EmailSchema = z.string().email('Invalid email format').min(1, 'Email is required')
+export const EmailSchema = z
+  .string()
+  .email('Invalid email format')
+  .min(1, 'Email is required')
 
 /**
  * Phone validation schema (E.164 format)
  */
-export const PhoneSchema = z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number format')
+export const PhoneSchema = z
+  .string()
+  .regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number format')
 
 /**
  * URL validation schema
@@ -59,7 +64,9 @@ export const PaginationSchema = z.object({
  * @param {T} itemSchema The schema for individual items in the data array
  * @returns {z.ZodObject} The paginated response schema
  */
-export const PaginatedResponseSchema = <T extends z.ZodTypeAny>(itemSchema: T) =>
+export const PaginatedResponseSchema = <T extends z.ZodTypeAny>(
+  itemSchema: T,
+) =>
   z.object({
     data: z.array(itemSchema),
     pagination: PaginationSchema,
@@ -83,7 +90,9 @@ export type Url = z.infer<typeof UrlSchema>
 /**
  * Type inferred from ApiResponseSchema
  */
-export type ApiResponse<T> = z.infer<ReturnType<typeof ApiResponseSchema<z.ZodType<T>>>>
+export type ApiResponse<T> = z.infer<
+  ReturnType<typeof ApiResponseSchema<z.ZodType<T>>>
+>
 
 /**
  * Type inferred from PaginationSchema
@@ -93,7 +102,9 @@ export type Pagination = z.infer<typeof PaginationSchema>
 /**
  * Type inferred from PaginatedResponseSchema
  */
-export type PaginatedResponse<T> = z.infer<ReturnType<typeof PaginatedResponseSchema<z.ZodType<T>>>>
+export type PaginatedResponse<T> = z.infer<
+  ReturnType<typeof PaginatedResponseSchema<z.ZodType<T>>>
+>
 
 /**
  * Validates data against a schema and throws detailed errors
@@ -107,7 +118,9 @@ export const validateSchema = <T>(schema: z.ZodSchema<T>, data: unknown): T => {
   const result = schema.safeParse(data)
 
   if (!result.success) {
-    const errors = result.error.issues.map((err: z.ZodIssue) => `${err.path.join('.')}: ${err.message}`)
+    const errors = result.error.issues.map(
+      (err: z.ZodIssue) => `${err.path.join('.')}: ${err.message}`,
+    )
     throw new Error(`Validation failed: ${errors.join(', ')}`)
   }
 
@@ -131,6 +144,8 @@ export const safeValidateSchema = <T>(
     return { success: true, data: result.data }
   }
 
-  const errors = result.error.issues.map((err: z.ZodIssue) => `${err.path.join('.')}: ${err.message}`)
+  const errors = result.error.issues.map(
+    (err: z.ZodIssue) => `${err.path.join('.')}: ${err.message}`,
+  )
   return { success: false, errors }
 }

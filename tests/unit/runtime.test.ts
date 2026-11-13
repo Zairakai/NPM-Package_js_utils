@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest'
-import { data_get, data_set, retry, tap, throw_if, throw_unless, value, when } from '../../src/runtime'
+import {
+  data_get,
+  data_set,
+  retry,
+  tap,
+  throw_if,
+  throw_unless,
+  value,
+  when,
+} from '../../src/runtime'
 
 describe('tap()', () => {
   it('executes callback for side effects and returns original value', () => {
