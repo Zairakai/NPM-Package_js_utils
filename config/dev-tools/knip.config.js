@@ -1,10 +1,21 @@
 /**
- * Knip configuration
+ * Knip configuration - extends the @zairakai/js-dev-tools base config.
  * @see https://knip.dev/reference/configuration
  */
+
+import baseConfig from '@zairakai/js-dev-tools/config/knip.config.js'
+
 export default {
+  ...baseConfig,
   project: ['src/**/*.ts'],
-  // The tools are run by the Makefile and the npm scripts, which Knip does not read
-  ignoreBinaries: ['eslint', 'prettier', 'markdownlint', 'make'],
+  // The base ignores docs/**, stylelint and zod for the projects that have them: this one does not.
+  ignore: [],
+  // The package.json scripts call these binaries, which the dev-tools package installs
+  ignoreBinaries: [
+    ...baseConfig.ignoreBinaries,
+    'eslint',
+    'prettier',
+    'markdownlint',
+  ],
   ignoreDependencies: ['sort-package-json'],
 }
